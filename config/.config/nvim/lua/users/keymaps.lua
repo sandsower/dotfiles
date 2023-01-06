@@ -34,8 +34,15 @@ keymap("v", "<leader>h", "<cmd>HopwWord<CR>", opts)
 keymap("v", "<leader>l", "<cmd>HopLine<CR>", opts)
 
 -- Git
-keymap("n", "<leader>b", ":Gitsigns toggle_current_line_blame<CR>", opts)
-keymap("n", "<leader>gg", ":LazyGit<CR>", opts)
+keymap("n", "<leader>b", ":Git blame<CR>", opts)
+
+-- Clipboard
+keymap("n", "<leader>y", "\"*y", opts)
+keymap("v", "<leader>y", "\"*y", opts)
+keymap("n", "<leader>p", "\"*p", opts)
+keymap("n", "<leader>Y", "\"+y", opts)
+keymap("v", "<leader>Y", "\"+y", opts)
+keymap("n", "<leader>P", "\"+y", opts)
 
 -- Tests
 -- nnoremap <silent> <leader>t :TestNearest<CR>

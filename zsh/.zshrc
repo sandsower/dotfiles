@@ -145,3 +145,5 @@ armageddon() {
     docker volume rm $(docker volume ls --filter dangling=true -q)
     docker rmi -f $(docker images -qa)
 }
+
+export PATH="/usr/local/opt/openjdk/bin:$PATH"

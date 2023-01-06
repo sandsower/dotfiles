@@ -9,7 +9,7 @@ end
 -- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 local on_attach = function(client, bufnr)
-    require "lsp_signature".on_attach()
+    -- require "lsp_signature".on_attach()
 
     vim.cmd("command! LspDef lua vim.lsp.buf.definition()")
     vim.cmd("command! LspFormatting lua vim.lsp.buf.formatting()")
@@ -68,7 +68,7 @@ local on_attach = function(client, bufnr)
     -- buf_map(bufnr, "n", "<Leader>rp", ":RefPrintFunc<CR>", {noremap = true})
     -- buf_map(bufnr, "v", "<Leader>rv", ":RefPrintVar<CR>", {noremap = true})
     -- buf_map(bufnr, "n", "<Leader>rc", ":RefPrintCleanup<CR>", {noremap = true})
-    if client.resolved_capabilities.document_formatting then
+    if client.server_capabilities.documentFormattingProvider then
         vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
     end
 end

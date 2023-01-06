@@ -60,7 +60,7 @@ return packer.startup(function(use)
   use "hrsh7th/cmp-cmdline"
   use "hrsh7th/nvim-cmp"
 
-  use "ray-x/lsp_signature.nvim"
+  -- use "ray-x/lsp_signature.nvim"
 
   use {
 	  "nvim-treesitter/nvim-treesitter", 
@@ -74,7 +74,7 @@ return packer.startup(function(use)
 
   --Git
   --use "mhinz/vim-signify"
-  use "kdheepak/lazygit.nvim"
+  use "tpope/vim-fugitive"
   use "lewis6991/gitsigns.nvim"
 
 
