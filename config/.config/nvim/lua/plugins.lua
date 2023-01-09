@@ -71,6 +71,7 @@ return packer.startup(function(use)
   use "tpope/vim-surround"
   use "tpope/vim-commentary"
   use "tpope/vim-repeat"
+  use "tpope/vim-abolish"
 
   --Git
   --use "mhinz/vim-signify"
@@ -119,5 +120,7 @@ return packer.startup(function(use)
 	  requires = { 'kyazdani42/nvim-web-devicons', opt = true },
 	})
 
+  -- Harpoon
+  use "ThePrimeagen/harpoon"
 
 end)

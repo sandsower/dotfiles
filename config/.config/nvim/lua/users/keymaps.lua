@@ -39,10 +39,11 @@ keymap("n", "<leader>b", ":Git blame<CR>", opts)
 -- Clipboard
 keymap("n", "<leader>y", "\"*y", opts)
 keymap("v", "<leader>y", "\"*y", opts)
-keymap("n", "<leader>p", "\"*p", opts)
 keymap("n", "<leader>Y", "\"+y", opts)
 keymap("v", "<leader>Y", "\"+y", opts)
 keymap("n", "<leader>P", "\"+y", opts)
+keymap("x", "<leader>p", "\"_dP", opts)
+
 
 -- Tests
 -- nnoremap <silent> <leader>t :TestNearest<CR>

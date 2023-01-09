@@ -71,6 +71,14 @@ local on_attach = function(client, bufnr)
     if client.server_capabilities.documentFormattingProvider then
         vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
     end
+
+    -- testing
+    buf_map(bufnr, "n", "<leader>tt", ":TestNearest<CR>", {silent = true})
+    buf_map(bufnr, "n", "<leader>tf", ":TestFile<CR>", {silent = true})
+    buf_map(bufnr, "n", "<leader>ts", ":TestSuite<CR>", {silent = true})
+    buf_map(bufnr, "n", "<leader>tl", ":TestLast<CR>", {silent = true})
+    buf_map(bufnr, "n", "<leader>ta", ":TestVisit<CR>", {silent = true})
+    
 end
 
 for _, server in ipairs({

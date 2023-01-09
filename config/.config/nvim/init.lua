@@ -9,10 +9,11 @@ require "users.refactoring"
 require "users.galaxyline"
 require "users.options"
 require "users.colorscheme"
+require "users.refactoring"
+require "users.harpoon"
 
 -- require "users.copilot"
 require "which-key".setup() 
 require "hop".setup()
 -- require "telescope".load_extension('fzf')
-require "refactoring".setup({})
 
