@@ -112,6 +112,10 @@ return packer.startup(function(use)
   --   end,
   -- }
   
+  -- Visual improvements
+  use 'yuttie/comfortable-motion.vim'
+
+  
   --Statusline
   use({
 	  'glepnir/galaxyline.nvim',
@@ -122,5 +126,8 @@ return packer.startup(function(use)
 
   -- Harpoon
   use "ThePrimeagen/harpoon"
+
+  -- Rust
+  use "simrat39/rust-tools.nvim"
 
 end)

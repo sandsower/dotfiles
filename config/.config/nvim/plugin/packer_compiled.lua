@@ -99,6 +99,11 @@ _G.packer_plugins = {
     path = "/Users/vic/.local/share/nvim/site/pack/packer/start/cmp-vsnip",
     url = "https://github.com/hrsh7th/cmp-vsnip"
   },
+  ["comfortable-motion.vim"] = {
+    loaded = true,
+    path = "/Users/vic/.local/share/nvim/site/pack/packer/start/comfortable-motion.vim",
+    url = "https://github.com/yuttie/comfortable-motion.vim"
+  },
   ["copilot.vim"] = {
     loaded = true,
     path = "/Users/vic/.local/share/nvim/site/pack/packer/start/copilot.vim",
@@ -188,6 +193,11 @@ _G.packer_plugins = {
     loaded = true,
     path = "/Users/vic/.local/share/nvim/site/pack/packer/start/refactoring.nvim",
     url = "https://github.com/ThePrimeagen/refactoring.nvim"
+  },
+  ["rust-tools.nvim"] = {
+    loaded = true,
+    path = "/Users/vic/.local/share/nvim/site/pack/packer/start/rust-tools.nvim",
+    url = "https://github.com/simrat39/rust-tools.nvim"
   },
   ["telescope-fzf-native.nvim"] = {
     loaded = true,

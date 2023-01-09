@@ -78,13 +78,14 @@ local on_attach = function(client, bufnr)
     buf_map(bufnr, "n", "<leader>ts", ":TestSuite<CR>", {silent = true})
     buf_map(bufnr, "n", "<leader>tl", ":TestLast<CR>", {silent = true})
     buf_map(bufnr, "n", "<leader>ta", ":TestVisit<CR>", {silent = true})
-    
+
 end
 
 for _, server in ipairs({
   "gopls",
   "null-ls",
   "tsserver",
+  "rust-analyzer",
 }) do
   require("lsp." .. server).setup(on_attach, capabilities)
 end
