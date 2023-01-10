@@ -78,7 +78,6 @@ return packer.startup(function(use)
   use "tpope/vim-fugitive"
   use "lewis6991/gitsigns.nvim"
 
-
   --Snippets
   use "hrsh7th/cmp-vsnip"
   use "hrsh7th/vim-vsnip"
@@ -115,7 +114,6 @@ return packer.startup(function(use)
   -- Visual improvements
   use 'yuttie/comfortable-motion.vim'
 
-  
   --Statusline
   use({
 	  'glepnir/galaxyline.nvim',

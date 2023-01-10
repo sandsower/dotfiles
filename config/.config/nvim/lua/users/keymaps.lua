@@ -34,23 +34,25 @@ keymap("v", "<leader>h", "<cmd>HopwWord<CR>", opts)
 keymap("v", "<leader>l", "<cmd>HopLine<CR>", opts)
 
 -- Git
+
 keymap("n", "<leader>b", ":Git blame<CR>", opts)
 
+-- Testing
+
+keymap("n", "<leader>tt", ":TestNearest<CR>", opts)
+keymap("n", "<leader>tf", ":TestFiles<CR>", opts)
+keymap("n", "<leader>ts", ":TestSuite<CR>", opts)
+keymap("n", "<leader>tl", ":TestLast<CR>", opts)
+keymap("n", "<leader>ta", ":TestVisit<CR>", opts)
+
 -- Clipboard
+
 keymap("n", "<leader>y", "\"*y", opts)
 keymap("v", "<leader>y", "\"*y", opts)
 keymap("n", "<leader>Y", "\"+y", opts)
 keymap("v", "<leader>Y", "\"+y", opts)
 keymap("n", "<leader>P", "\"+y", opts)
 keymap("x", "<leader>p", "\"_dP", opts)
-
-
--- Tests
--- nnoremap <silent> <leader>t :TestNearest<CR>
--- nnoremap <silent> <leader>T :TestFile<CR>
--- nnoremap <silent> <leader>a :TestSuite<CR>
--- nnoremap <silent> <leader>l :TestLast<CR>
--- nnoremap <silent> <leader>g :TestVisit<CR>
 
 -- Nvim-Tree
 
