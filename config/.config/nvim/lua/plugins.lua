@@ -67,6 +67,9 @@ return packer.startup(function(use)
 	  run = ":TSUpdate" --We recommend updating the parsers on update
   }
 
+  -- Terminal
+  use 'voldikss/vim-floaterm'
+
   --Autopair/surround
   use "tpope/vim-surround"
   use "tpope/vim-commentary"

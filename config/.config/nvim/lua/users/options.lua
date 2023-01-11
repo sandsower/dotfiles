@@ -58,3 +58,6 @@ vim.filetype.add {
   },
 }
 
+-- Setting testing strategy
+vim.g['test#strategy'] = 'floaterm'
+

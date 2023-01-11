@@ -219,6 +219,11 @@ _G.packer_plugins = {
     path = "/Users/vic/.local/share/nvim/site/pack/packer/start/vim-commentary",
     url = "https://github.com/tpope/vim-commentary"
   },
+  ["vim-floaterm"] = {
+    loaded = true,
+    path = "/Users/vic/.local/share/nvim/site/pack/packer/start/vim-floaterm",
+    url = "https://github.com/voldikss/vim-floaterm"
+  },
   ["vim-fugitive"] = {
     loaded = true,
     path = "/Users/vic/.local/share/nvim/site/pack/packer/start/vim-fugitive",
