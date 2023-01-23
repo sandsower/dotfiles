@@ -883,20 +883,20 @@
 
 font:
   normal:
-    family: MesloLGS NF
-    style: Regular
+    family: FiraCode Nerd Font Mono
+    style: Medium
 
   bold:
-    family: MesloLGS NF
+    family: FiraCode Nerd Font Mono
     style: Bold
 
   italic:
-    family: MesloLGS NF
-    style: Italic
+    family: FiraCode Nerd Font Mono
+    style: Light
 
   bold_italic:
-    family: MesloLGS NF
-    style: Bold Italic
+    family: FiraCode Nerd Font Mono
+    style: Bold
 
   size: 11
 

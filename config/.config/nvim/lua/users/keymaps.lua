@@ -39,11 +39,19 @@ keymap("n", "<leader>b", ":Git blame<CR>", opts)
 
 -- Testing
 
-keymap("n", "<leader>tt", ":TestNearest<CR>", opts)
-keymap("n", "<leader>tf", ":TestFiles<CR>", opts)
-keymap("n", "<leader>ts", ":TestSuite<CR>", opts)
-keymap("n", "<leader>tl", ":TestLast<CR>", opts)
-keymap("n", "<leader>ta", ":TestVisit<CR>", opts)
+-- VimTest
+-- keymap("n", "<leader>tt", ":TestNearest<CR>", opts)
+-- keymap("n", "<leader>tf", ":TestFiles<CR>", opts)
+-- keymap("n", "<leader>ts", ":TestSuite<CR>", opts)
+-- keymap("n", "<leader>tl", ":TestLast<CR>", opts)
+-- keymap("n", "<leader>ta", ":TestVisit<CR>", opts)
+
+-- NeoTest
+keymap("n", "<leader>tt", "<cmd>lua require('neotest').run.run()<CR>", opts)
+keymap("n", "<leader>tf", "<cmd>lua require('neotest').run.run(vim.fn.expand('%'))<CR>", opts)
+keymap("n", "<leader>ts", "<cmd>lua require('neotest').run.run(vim.fn.getcwd())<CR>", opts)
+keymap("n", "<leader>to", "<cmd>lua require('neotest').summary.toggle()<CR>", opts)
+
 
 -- Clipboard
 
