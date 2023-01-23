@@ -79,6 +79,8 @@ for _, server in ipairs({
   "null-ls",
   "tsserver",
   "rust-analyzer",
+  "mason",
+  "nvim-metals",
 }) do
   require("lsp." .. server).setup(on_attach, capabilities)
 end
