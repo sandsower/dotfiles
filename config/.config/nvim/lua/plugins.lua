@@ -60,6 +60,8 @@ return packer.startup(function(use)
   use "hrsh7th/cmp-cmdline"
   use "hrsh7th/nvim-cmp"
 
+  use "williamboman/mason.nvim"
+
   -- use "ray-x/lsp_signature.nvim"
 
   use {
@@ -130,5 +132,13 @@ return packer.startup(function(use)
 
   -- Rust
   use "simrat39/rust-tools.nvim"
+
+  -- Scala
+  use({'scalameta/nvim-metals', requires = { "nvim-lua/plenary.nvim" }})
+
+  -- Golang
+  use 'ray-x/go.nvim'
+  use 'ray-x/guihua.lua'
+
 
 end)
