@@ -163,8 +163,10 @@ return packer.startup(function(use)
   use({'scalameta/nvim-metals', requires = { "nvim-lua/plenary.nvim" }})
 
   -- Golang
+  use 'mfussenegger/nvim-dap'
+  use 'rcarriga/nvim-dap-ui'
+  use 'theHamsta/nvim-dap-virtual-text'
   use 'ray-x/go.nvim'
   use 'ray-x/guihua.lua'
-
 
 end)

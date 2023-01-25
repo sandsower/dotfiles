@@ -75,7 +75,7 @@ local on_attach = function(client, bufnr)
 end
 
 for _, server in ipairs({
-  "gopls",
+  -- "gopls",
   "null-ls",
   "tsserver",
   "rust-analyzer",
