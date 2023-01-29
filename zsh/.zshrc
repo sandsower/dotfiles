@@ -146,15 +146,10 @@ armageddon() {
     docker rmi -f $(docker images -qa)
 }
 
-mono() {
-  cd ~/Work/sothebys/ws-monorepo
-  vim .
-}
-
-
 export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
 export PATH="/usr/local/opt/openjdk/bin:$PATH:$GOPATH:$GOBIN"
 
 export GOPRIVATE=github.com/gv-sothebys-vic
 
+source ./.private_commands.sh

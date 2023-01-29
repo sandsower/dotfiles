@@ -11,40 +11,39 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 
 -- Telescope
-
 keymap("n", "<leader>ff", "<cmd>Telescope git_files<cr>", opts)
 keymap("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", opts)
 keymap("n", "<leader>fb", "<cmd>Telescope buffers<cr>", opts)
+keymap("n", "<leader>fs", "<cmd>Telescope grep_string<cr>", opts)
 keymap("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", opts)
-keymap("n", "<leader>fh", "<cmd>Telescope git_status<cr>", opts)
 
+-- Neovim LSP pickers
+keymap("n", "<leader>fa", "<cmd>Telescope lsp_code_actions<cr>", opts)
+keymap("n", "<leader>fr", "<cmd>Telescope lsp_references<cr>", opts)
+keymap("n", "<leader>fd", "<cmd>Telescope lsp_definitions<cr>", opts)
+keymap("n", "<leader>fi", "<cmd>Telescope lsp_implementations<cr>", opts)
+
+-- Git pickers
+keymap("n", "<leader>gs", "<cmd>Telescope git_status<cr>", opts)
+keymap("n", "<leader>gb", "<cmd>Telescope git_branches<cr>", opts)
+keymap("n", "<leader>gc", "<cmd>Telescope git_commits<cr>", opts)
+keymap("n", "<leader>gC", "<cmd>Telescope git_bcommits<cr>", opts)
 
 -- Navigation
-
 keymap("n", "<C-h>", "<C-w>h", opts)
 keymap("n", "<C-j>", "<C-w>j", opts)
 keymap("n", "<C-k>", "<C-w>k", opts)
 keymap("n", "<C-l>", "<C-w>l", opts)
 
 -- Hop
-
 keymap("n", "<leader>h", "<cmd>HopWord<CR>", opts)
 keymap("n", "<leader>l", "<cmd>HopLine<CR>", opts)
 keymap("v", "<leader>h", "<cmd>HopwWord<CR>", opts)
 keymap("v", "<leader>l", "<cmd>HopLine<CR>", opts)
 
 -- Git
-
+-- Using lazygit directly for the rest
 keymap("n", "<leader>b", ":Git blame<CR>", opts)
-
--- Testing
-
--- VimTest
--- keymap("n", "<leader>tt", ":TestNearest<CR>", opts)
--- keymap("n", "<leader>tf", ":TestFiles<CR>", opts)
--- keymap("n", "<leader>ts", ":TestSuite<CR>", opts)
--- keymap("n", "<leader>tl", ":TestLast<CR>", opts)
--- keymap("n", "<leader>ta", ":TestVisit<CR>", opts)
 
 -- NeoTest
 keymap("n", "<leader>tt", "<cmd>lua require('neotest').run.run()<CR>", opts)
@@ -54,7 +53,6 @@ keymap("n", "<leader>to", "<cmd>lua require('neotest').summary.toggle()<CR>", op
 
 
 -- Clipboard
-
 keymap("n", "<leader>y", "\"*y", opts)
 keymap("v", "<leader>y", "\"*y", opts)
 keymap("n", "<leader>Y", "\"+y", opts)
@@ -63,7 +61,6 @@ keymap("n", "<leader>P", "\"+y", opts)
 keymap("x", "<leader>p", "\"_dP", opts)
 
 -- Nvim-Tree
-
 keymap("n", "<C-n>", ":NvimTreeToggle<CR>", opts)
 keymap("n", "<leader>r", ":NvimTreeRefresh<CR>", opts)
 

@@ -27,15 +27,13 @@ local on_attach = function(client, bufnr)
     vim.cmd("command! RefPrintVar lua require('refactoring.debug.printvar({})<CR>'");
     vim.cmd("command! RefPrintFunc lua require('refactoring.debug.printf({below = true})<CR>'");
     vim.cmd("command! RefCleanup lua require('refactoring.debug.cleanup({})<CR>'");
+
     buf_map(bufnr, "n", "K", ":LspHover<CR>")
     buf_map(bufnr, "n", "[a", ":LspDiagPrev<CR>")
     buf_map(bufnr, "n", "]a", ":LspDiagNext<CR>")
-    buf_map(bufnr, "n", "ga", ":LspCodeAction<CR>")
     buf_map(bufnr, "n", "<Leader>a", ":LspDiagLine<CR>")
     buf_map(bufnr, "i", "<C-x><C-x>", "<cmd> LspSignatureHelp<CR>")
-        -- goto bindings
-    buf_map(bufnr, "n", "<localleader>gg", ":LspDef<CR>", {silent = true})
-    buf_map(bufnr, "n", "<localleader>gr", ":LspRefs<CR>", {silent = true})
+
     -- help and info bindings
     buf_map(bufnr, "n", "<localleader>hd", ":LspTypeDef<CR>", {silent = true})
     buf_map(bufnr, "n", "<localleader>hh", ":LspHover<CR>", {silent = true})
@@ -75,7 +73,7 @@ local on_attach = function(client, bufnr)
 end
 
 for _, server in ipairs({
-  -- "gopls",
+  "gopls",
   "null-ls",
   "tsserver",
   "rust-analyzer",
