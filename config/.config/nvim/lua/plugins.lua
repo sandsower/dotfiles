@@ -1,110 +1,83 @@
-local fn = vim.fn
-
--- Automatically install packer
-local install_path = fn.stdpath "data" .. "/site/pack/packer/start/packer.nvim"
-if fn.empty(fn.glob(install_path)) > 0 then
-  PACKER_BOOTSTRAP = fn.system {
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
     "git",
     "clone",
-    "--depth",
-    "1",
-    "https://github.com/wbthomason/packer.nvim",
-    install_path,
-  }
-  print "Installing packer close and reopen Neovim..."
-  vim.cmd [[packadd packer.nvim]]
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
 end
+vim.opt.rtp:prepend(lazypath)
 
--- Autocommand that reloads neovim whenever you save the plugins.lua file
-vim.cmd [[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerSync
-  augroup end
-]]
-
-local status_ok, packer = pcall(require, "packer")
-if not status_ok then
-	return
-end
-
-packer.init {
-	display = {
-		open_fn = function()
-			return require("packer.util").float { border = "rounded" }
-		end,
-	},
-}
-
-return packer.startup(function(use)
-  use "wbthomason/packer.nvim" -- Have packer manage itself
-
+require("lazy").setup({
   -- Plugin Section
   --ColorSchemes
-  use "morhetz/gruvbox"
-  use "mhartington/oceanic-next"
-  use "drewtempelmeyer/palenight.vim"
+  {"morhetz/gruvbox", lazy = true},
+  "mhartington/oceanic-next",
+  "drewtempelmeyer/palenight.vim",
 
   --WhichKey for help
-  use "folke/which-key.nvim"
+  "folke/which-key.nvim",
 
   --Autocompletion
-  use "neovim/nvim-lspconfig"
-  use "jose-elias-alvarez/null-ls.nvim"
-  use "jose-elias-alvarez/nvim-lsp-ts-utils"
-  use "nvim-lua/plenary.nvim"
+  "neovim/nvim-lspconfig",
+  "jose-elias-alvarez/null-ls.nvim",
+  "jose-elias-alvarez/nvim-lsp-ts-utils",
+  "nvim-lua/plenary.nvim",
 
-  use "hrsh7th/cmp-nvim-lsp"
-  use "hrsh7th/cmp-buffer"
-  use "hrsh7th/cmp-path"
-  use "hrsh7th/cmp-cmdline"
-  use "hrsh7th/nvim-cmp"
+  "hrsh7th/cmp-nvim-lsp",
+  "hrsh7th/cmp-buffer",
+  "hrsh7th/cmp-path",
+  "hrsh7th/cmp-cmdline",
+  "hrsh7th/nvim-cmp",
 
-  use "williamboman/mason.nvim"
+  "williamboman/mason.nvim",
 
-  -- use "ray-x/lsp_signature.nvim"
+  -- "ray-x/lsp_signature.nvim"
 
-  use {
+  {
 	  "nvim-treesitter/nvim-treesitter", 
-	  run = ":TSUpdate" --We recommend updating the parsers on update
-  }
+	  build = ":TSUpdate" --We recommend updating the parsers on update
+  },
 
   -- Terminal
-  use 'voldikss/vim-floaterm'
+  'voldikss/vim-floaterm',
 
   --Autopair/surround
-  use "tpope/vim-surround"
-  use "tpope/vim-commentary"
-  use "tpope/vim-repeat"
-  use "tpope/vim-abolish"
+  "tpope/vim-surround",
+  "tpope/vim-commentary",
+  "tpope/vim-repeat",
+  "tpope/vim-abolish",
 
   --Git
-  --use "mhinz/vim-signify"
-  use "tpope/vim-fugitive"
-  use "lewis6991/gitsigns.nvim"
+  --"mhinz/vim-signify"
+  "tpope/vim-fugitive",
+  "lewis6991/gitsigns.nvim",
 
   --Snippets
-  use "hrsh7th/cmp-vsnip"
-  use "hrsh7th/vim-vsnip"
+  "hrsh7th/cmp-vsnip",
+  "hrsh7th/vim-vsnip",
 
   --Debugging utils
-  use "ThePrimeagen/refactoring.nvim"
+  "ThePrimeagen/refactoring.nvim",
 
   --Fuzzy finder/movement
-  use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
-  use "nvim-telescope/telescope.nvim"
-  use "phaazon/hop.nvim"
+  {'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+  "nvim-telescope/telescope.nvim",
+  "phaazon/hop.nvim",
 
   --File Tree 
-  use "kyazdani42/nvim-web-devicons" --for file icons
-  use "kyazdani42/nvim-tree.lua"
-  use "jparise/vim-graphql"
+  "kyazdani42/nvim-web-devicons", --for file icons,
+  {"kyazdani42/nvim-tree.lua", lazy = true},
+  "jparise/vim-graphql",
 
   --Tests
-  -- use "vim-test/vim-test"
-  use({
+  "vim-test/vim-test",
+  {
   "nvim-neotest/neotest",
-  requires = {
+  dependencies = {
     "nvim-neotest/neotest-go",
     -- Your other test adapters here
   },
@@ -127,12 +100,12 @@ return packer.startup(function(use)
       },
     })
   end,
-})
+},
 
   -- Copilot
-  use "github/copilot.vim"
-  -- use "zbirenbaum/copilot-cmp"
-  -- use {
+  "github/copilot.vim",
+  -- "zbirenbaum/copilot-cmp"
+  -- {
   --   "zbirenbaum/copilot.lua",
   --   event = { "VimEnter" },
   --   config = function()
@@ -143,30 +116,30 @@ return packer.startup(function(use)
   -- }
   
   -- Visual improvements
-  use 'yuttie/comfortable-motion.vim'
+  'yuttie/comfortable-motion.vim',
 
   --Statusline
-  use({
+  {
 	  'glepnir/galaxyline.nvim',
 	  branch = 'main',
 	  -- some optional icons
-	  requires = { 'kyazdani42/nvim-web-devicons', opt = true },
-	})
+	  dependencies = { 'kyazdani42/nvim-web-devicons', lazy = true },
+	},
 
   -- Harpoon
-  use "ThePrimeagen/harpoon"
+  "ThePrimeagen/harpoon",
 
   -- Rust
-  use "simrat39/rust-tools.nvim"
+  "simrat39/rust-tools.nvim",
 
   -- Scala
-  use({'scalameta/nvim-metals', requires = { "nvim-lua/plenary.nvim" }})
+  {'scalameta/nvim-metals', dependencies = { "nvim-lua/plenary.nvim" }},
 
   -- Golang
-  use 'mfussenegger/nvim-dap'
-  use 'rcarriga/nvim-dap-ui'
-  use 'theHamsta/nvim-dap-virtual-text'
-  use 'ray-x/go.nvim'
-  use 'ray-x/guihua.lua'
+  'mfussenegger/nvim-dap',
+  'rcarriga/nvim-dap-ui',
+  'theHamsta/nvim-dap-virtual-text',
+  'ray-x/go.nvim',
+  'ray-x/guihua.lua',
 
-end)
+})
