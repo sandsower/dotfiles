@@ -152,4 +152,4 @@ export PATH="/usr/local/opt/openjdk/bin:$PATH:$GOPATH:$GOBIN"
 
 export GOPRIVATE=github.com/gv-sothebys-vic
 
-source ./.private_commands.sh
+source ~/.private_commands.sh

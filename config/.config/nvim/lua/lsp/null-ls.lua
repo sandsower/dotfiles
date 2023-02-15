@@ -13,12 +13,12 @@ local sources = {
   -- golang
   null_ls.builtins.diagnostics.golangci_lint,
   null_ls.builtins.diagnostics.revive,
-  null_ls.builtins.formatting.golines.with({
-    extra_args = {
-      "--max-len=180",
-      "--base-formatter=gofumpt",
-    },
-  })
+  -- null_ls.builtins.formatting.golines.with({
+  --   extra_args = {
+  --     "--max-len=180",
+  --     "--base-formatter=gofumpt",
+  --   },
+  -- })
 }
 table.insert(sources, gotest)
 table.insert(sources, gotest_codeaction)
