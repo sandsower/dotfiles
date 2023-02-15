@@ -4,6 +4,8 @@ local M = {}
 M.setup = function(on_attach, capabilities)
   lspconfig.tsserver.setup({
       capabilities = capabilities,
+      filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
+      cmd = { "typescript-language-server", "--stdio" },
       on_attach = function(client, bufnr)
           client.server_capabilities.documentFormattingProvider = false
           client.server_capabilities.documentRangeFormattingProvider = false

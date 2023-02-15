@@ -1,7 +1,4 @@
 require'nvim-tree'.setup { 
- filters = {
-    custom = { ".git", "node_modules" },
-  },
   view = {
     width=40,
   },
@@ -51,3 +48,4 @@ require'nvim-tree'.setup {
   },
   respect_buf_cwd = false,
 }
+

@@ -4,7 +4,7 @@ require('nvim-treesitter.configs').setup {
 
   -- Install languages synchronously (only applied to `ensure_installed`)
   -- sync_install = false,
-  auto_install = true,
+  -- auto_install = true,
 
   -- List of parsers to ignore installing
   -- ignore_install = { "javascript" },
