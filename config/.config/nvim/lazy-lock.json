@@ -13,7 +13,7 @@
   "guihua.lua": { "branch": "master", "commit": "da889f7da0185471c67429f258dab366bf081688" },
   "harpoon": { "branch": "master", "commit": "8c0bb0a328e57278f4783bb0e2ea32f296d36db1" },
   "hop.nvim": { "branch": "master", "commit": "90db1b2c61b820e230599a04fedcd2679e64bd07" },
-  "lazy.nvim": { "branch": "main", "commit": "15fe46a728b7473d4cae368838bbc1c79c3a3f48" },
+  "lazy.nvim": { "branch": "main", "commit": "f2cc9ef6acc7367c001b7507c82cab3ab7c29cae" },
   "mason.nvim": { "branch": "main", "commit": "2469bfc2538652cb0cf88c129f67d38e46a9cb59" },
   "neotest": { "branch": "master", "commit": "392808a91d6ee28d27cbfb93c9fd9781759b5d00" },
   "neotest-go": { "branch": "main", "commit": "981406c12bd3c77eb434211a1b85b964ab5bbdd5" },
