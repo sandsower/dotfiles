@@ -6,6 +6,14 @@ local buf_map = function(bufnr, mode, lhs, rhs, opts)
     })
 end
 
+
+vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
+  vim.lsp.handlers.signature_help, {
+  border = 'rounded',
+  close_events = { "CursorMoved", "BufHidden", "InsertCharPre" },
+}
+)
+
 -- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
 local on_attach = function(client, bufnr)
@@ -67,20 +75,52 @@ local on_attach = function(client, bufnr)
     -- buf_map(bufnr, "v", "<Leader>rv", ":RefPrintVar<CR>", {noremap = true})
     -- buf_map(bufnr, "n", "<Leader>rc", ":RefPrintCleanup<CR>", {noremap = true})
     if client.server_capabilities.documentFormattingProvider then
-        vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_sync()")
+          vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.format()")
     end
 
 end
 
-for _, server in ipairs({
-  "gopls",
-  "null-ls",
-  "tsserver",
-  "rust-analyzer",
-  "mason",
-  "nvim-metals",
-}) do
-  require("lsp." .. server).setup(on_attach, capabilities)
-end
+require("neodev").setup()
 
+-- nvim-cmp supports additional completion capabilities, so broadcast that to servers
+local capabilities = vim.lsp.protocol.make_client_capabilities()
+capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
+
+
+-- Setup mason so it can manage external tooling
+require('mason').setup()
+
+-- Configure linters and formatters
+require("lsp.null-ls").setup(on_attach)
+
+local servers = {
+  "gopls",
+  "jsonnet_ls",
+  "tsserver",
+  "rust_analyzer",
+}
+
+local mason_lspconfig = require 'mason-lspconfig'
+
+mason_lspconfig.setup {
+  ensure_installed = servers,
+}
+
+mason_lspconfig.setup_handlers {
+  function(server_name)
+    require('lspconfig')[server_name].setup {
+      capabilities = capabilities,
+      on_attach = on_attach,
+    }
+  end,
+  ["tsserver"] = function()
+    require("lsp.tsserver").setup(on_attach, capabilities)
+  end,
+  ["rust_analyzer"] = function()
+    require("lsp.rust-analyzer").setup(on_attach, capabilities)
+  end,
+}
+
+-- Turn on lsp status information
+require('fidget').setup()
 

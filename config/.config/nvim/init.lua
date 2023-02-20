@@ -12,7 +12,7 @@ require "users.colorscheme"
 require "users.refactoring"
 require "users.harpoon"
 require "users.gitsigns"
-require "users.golang"
+-- require "users.golang"
 
 -- require "users.copilot"
 require "which-key".setup() 

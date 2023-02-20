@@ -9,9 +9,18 @@ M.setup = function(on_attach, capabilities)
       on_attach = function(client, bufnr)
           client.server_capabilities.documentFormattingProvider = false
           client.server_capabilities.documentRangeFormattingProvider = false
-          local ts_utils = require("nvim-lsp-ts-utils")
-          ts_utils.setup({})
-          ts_utils.setup_client(client)
+          ts = require("typescript")
+          ts.setup(
+          {
+              disable_commands = false, -- prevent the plugin from creating Vim commands
+              debug = false, -- enable debug logging for commands
+              go_to_source_definition = {
+                  fallback = true, -- fall back to standard LSP definition on failure
+              },
+              server = { -- pass options to lspconfig's setup method
+                  on_attach = on_attach,
+              },
+          })
           on_attach(client, bufnr)
       end,
   })

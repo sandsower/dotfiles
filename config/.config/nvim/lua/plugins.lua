@@ -21,17 +21,49 @@ require("lazy").setup({
   --WhichKey for help
   "folke/which-key.nvim",
 
-  --Autocompletion
-  "neovim/nvim-lspconfig",
-  "jose-elias-alvarez/null-ls.nvim",
-  "jose-elias-alvarez/nvim-lsp-ts-utils",
-  "nvim-lua/plenary.nvim",
+  ----Autocompletion
+  --"neovim/nvim-lspconfig",
+  --"jose-elias-alvarez/null-ls.nvim",
+  --"jose-elias-alvarez/nvim-lsp-ts-utils",
+  --"nvim-lua/plenary.nvim",
 
-  "hrsh7th/cmp-nvim-lsp",
-  "hrsh7th/cmp-buffer",
-  "hrsh7th/cmp-path",
-  "hrsh7th/cmp-cmdline",
-  "hrsh7th/nvim-cmp",
+  --"hrsh7th/cmp-nvim-lsp",
+  --"hrsh7th/cmp-buffer",
+  --"hrsh7th/cmp-path",
+  --"hrsh7th/cmp-cmdline",
+  --"hrsh7th/nvim-cmp",
+
+  { -- LSP Configuration & Plugins
+    'neovim/nvim-lspconfig',
+    dependencies = {
+      -- Automatically install LSPs to stdpath for neovim
+      'williamboman/mason.nvim',
+      'williamboman/mason-lspconfig.nvim',
+
+      -- Useful status updates for LSP
+      'j-hui/fidget.nvim',
+
+      -- Additional lua configuration, makes nvim stuff amazing
+      'folke/neodev.nvim',
+
+      -- Linters and formatters
+      'jose-elias-alvarez/null-ls.nvim',
+      'jay-babu/mason-null-ls.nvim',
+      'jose-elias-alvarez/typescript.nvim',
+    },
+  },
+
+  { -- Autocompletion
+    'hrsh7th/nvim-cmp',
+    dependencies = {
+      'hrsh7th/cmp-nvim-lsp',
+      'L3MON4D3/LuaSnip',
+      'saadparwaiz1/cmp_luasnip',
+      'hrsh7th/cmp-buffer',
+      'hrsh7th/cmp-path'
+    },
+  },
+
 
   "williamboman/mason.nvim",
 

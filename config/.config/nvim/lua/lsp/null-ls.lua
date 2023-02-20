@@ -1,8 +1,6 @@
 local null_ls = require("null-ls")
 
 local M = {}
-local gotest = require("go.null_ls").gotest()
-local gotest_codeaction = require("go.null_ls").gotest_action()
 
 local sources = {
   -- typescript
@@ -13,15 +11,15 @@ local sources = {
   -- golang
   null_ls.builtins.diagnostics.golangci_lint,
   null_ls.builtins.diagnostics.revive,
-  -- null_ls.builtins.formatting.golines.with({
-  --   extra_args = {
-  --     "--max-len=180",
-  --     "--base-formatter=gofumpt",
-  --   },
-  -- })
+
+   -- postgres
+  null_ls.builtins.formatting.sqlfluff.with({
+    extra_args = {"--dialect", "postgres"}
+  }),
+  null_ls.builtins.diagnostics.sqlfluff.with({
+    extra_args = {"--dialect", "postgres"}
+  })
 }
-table.insert(sources, gotest)
-table.insert(sources, gotest_codeaction)
 
 M.setup = function(on_attach)
   null_ls.setup({
@@ -30,6 +28,11 @@ M.setup = function(on_attach)
     on_attach = on_attach,
     debounce = 1000,
     default_timeout = 5000,
+  })
+  require("mason-null-ls").setup({
+    ensure_installed = nil,
+    automatic_installation = true,
+    automatic_setup = false,
   })
 end
 
