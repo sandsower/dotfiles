@@ -17,6 +17,8 @@ require "users.gitsigns"
 -- require "users.copilot"
 require "which-key".setup() 
 require "hop".setup()
+require "inlay-hints".setup()
+require "colorizer".setup()
 -- require "telescope".load_extension('fzf')
 
 

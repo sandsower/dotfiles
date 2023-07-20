@@ -18,6 +18,9 @@ require("lazy").setup({
   "mhartington/oceanic-next",
   "drewtempelmeyer/palenight.vim",
 
+  --Colorizer
+  "norcalli/nvim-colorizer.lua",
+
   --WhichKey for help
   "folke/which-key.nvim",
 
@@ -50,6 +53,7 @@ require("lazy").setup({
       'jose-elias-alvarez/null-ls.nvim',
       'jay-babu/mason-null-ls.nvim',
       'jose-elias-alvarez/typescript.nvim',
+      'simrat39/inlay-hints.nvim'
     },
   },
 
@@ -63,7 +67,6 @@ require("lazy").setup({
       'hrsh7th/cmp-path'
     },
   },
-
 
   "williamboman/mason.nvim",
 
@@ -174,4 +177,9 @@ require("lazy").setup({
   'ray-x/go.nvim',
   'ray-x/guihua.lua',
 
+  -- Protobuf_
+  'wfxr/protobuf.vim',
+
+  -- utils
+  'andrewradev/linediff.vim',
 })

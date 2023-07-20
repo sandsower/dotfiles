@@ -28,6 +28,9 @@ M.setup = function(on_attach, capabilities)
           },
           procMacro = {
             enable = true
+          },
+          diagnostics = {
+            disabled = {"unresolved-proc-macro"},
           }
         }
       }

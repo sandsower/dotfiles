@@ -20,7 +20,7 @@ local on_attach = function(client, bufnr)
     -- require "lsp_signature".on_attach()
 
     vim.cmd("command! LspDef lua vim.lsp.buf.definition()")
-    vim.cmd("command! LspFormatting lua vim.lsp.buf.formatting()")
+    vim.cmd("command! LspFormatting lua vim.lsp.buf.format()")
     vim.cmd("command! LspCodeAction lua vim.lsp.buf.code_action()")
     vim.cmd("command! LspHover lua vim.lsp.buf.hover()")
     vim.cmd("command! LspRename lua vim.lsp.buf.rename()")
@@ -74,9 +74,9 @@ local on_attach = function(client, bufnr)
     -- buf_map(bufnr, "n", "<Leader>rp", ":RefPrintFunc<CR>", {noremap = true})
     -- buf_map(bufnr, "v", "<Leader>rv", ":RefPrintVar<CR>", {noremap = true})
     -- buf_map(bufnr, "n", "<Leader>rc", ":RefPrintCleanup<CR>", {noremap = true})
-    if client.server_capabilities.documentFormattingProvider then
-          vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.format()")
-    end
+    -- if client.server_capabilities.documentFormattingProvider then
+    --       vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.format()")
+    -- end
 
 end
 
@@ -98,6 +98,7 @@ local servers = {
   "jsonnet_ls",
   "tsserver",
   "rust_analyzer",
+  "tflint"
 }
 
 local mason_lspconfig = require 'mason-lspconfig'

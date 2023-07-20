@@ -148,7 +148,8 @@ armageddon() {
 
 export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
-export PATH="/usr/local/opt/openjdk/bin:$PATH:$GOPATH:$GOBIN"
+export PYTHONBIN=$HOME/.local/bin
+export PATH="/usr/local/opt/openjdk/bin:$PATH:$GOPATH:$GOBIN:$PYTHONBIN"
 
 export GOPRIVATE=github.com/gv-sothebys-vic
 

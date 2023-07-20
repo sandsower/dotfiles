@@ -6,7 +6,7 @@ local sources = {
   -- typescript
   null_ls.builtins.diagnostics.eslint_d,
   null_ls.builtins.code_actions.eslint_d,
-  null_ls.builtins.formatting.prettierd,
+  -- null_ls.builtins.formatting.prettierd,
 
   -- golang
   null_ls.builtins.diagnostics.golangci_lint,
@@ -32,7 +32,7 @@ M.setup = function(on_attach)
   require("mason-null-ls").setup({
     ensure_installed = nil,
     automatic_installation = true,
-    automatic_setup = false,
+    automatic_setup = true,
   })
 end
 
