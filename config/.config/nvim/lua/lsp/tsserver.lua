@@ -6,6 +6,9 @@ M.setup = function(on_attach, capabilities)
       capabilities = capabilities,
       filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
       cmd = { "typescript-language-server", "--stdio" },
+      root_dir = function(...)
+        return require("lspconfig.util").root_pattern(".git")(...)
+      end,
       on_attach = function(client, bufnr)
           client.server_capabilities.documentFormattingProvider = false
           client.server_capabilities.documentRangeFormattingProvider = false
