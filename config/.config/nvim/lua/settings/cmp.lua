@@ -1,7 +1,7 @@
 -- Setup nvim-cmp.
 local cmp = require'cmp'
 
-local icons = require "users.icons"
+local icons = require "settings.icons"
 
 local kind_icons = icons.kind
 

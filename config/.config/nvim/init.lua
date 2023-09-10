@@ -1,20 +1,20 @@
 require "plugins"
 
 require "lsp"
-require "users.keymaps"
-require "users.nvim-tree"
-require "users.nvim-treesitter"
-require "users.cmp"
-require "users.refactoring"
-require "users.galaxyline"
-require "users.options"
-require "users.colorscheme"
-require "users.refactoring"
-require "users.harpoon"
-require "users.gitsigns"
--- require "users.golang"
+require "settings.keymaps"
+require "settings.nvim-tree"
+require "settings.nvim-treesitter"
+require "settings.cmp"
+require "settings.refactoring"
+require "settings.galaxyline"
+require "settings.options"
+require "settings.colorscheme"
+require "settings.refactoring"
+require "settings.harpoon"
+require "settings.gitsigns"
+-- require "settings.golang"
 
--- require "users.copilot"
+-- require "settings.copilot"
 require "which-key".setup() 
 require "hop".setup()
 require "inlay-hints".setup()
