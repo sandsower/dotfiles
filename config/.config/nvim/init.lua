@@ -15,7 +15,7 @@ require "settings.gitsigns"
 -- require "settings.golang"
 
 -- require "settings.copilot"
-require "which-key".setup() 
+require "which-key".setup()
 require "hop".setup()
 require "inlay-hints".setup()
 require "colorizer".setup()

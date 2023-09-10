@@ -1,11 +1,9 @@
 local api = vim.api
-local cmd = vim.cmd
-local map = vim.keymap.set
 local M = {}
 
 local metals_config = require("metals").bare_config()
 
-M.setup = function() 
+M.setup = function()
 
 -- Example of settings
 metals_config.settings = {

@@ -12,7 +12,7 @@ M.setup = function(on_attach, capabilities)
       on_attach = function(client, bufnr)
           client.server_capabilities.documentFormattingProvider = false
           client.server_capabilities.documentRangeFormattingProvider = false
-          ts = require("typescript")
+          local ts = require("typescript")
           ts.setup(
           {
               disable_commands = false, -- prevent the plugin from creating Vim commands

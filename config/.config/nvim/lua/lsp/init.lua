@@ -16,7 +16,7 @@ vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
 
 -- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
-local on_attach = function(client, bufnr)
+local on_attach = function(_, bufnr)
     -- require "lsp_signature".on_attach()
 
     vim.cmd("command! LspDef lua vim.lsp.buf.definition()")
@@ -98,7 +98,8 @@ local servers = {
   "jsonnet_ls",
   "tsserver",
   "rust_analyzer",
-  "tflint"
+  "tflint",
+  "lua_ls",
 }
 
 local mason_lspconfig = require 'mason-lspconfig'

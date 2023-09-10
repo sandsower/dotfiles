@@ -1,4 +1,3 @@
-
 local options = {
 termguicolors= true,
 

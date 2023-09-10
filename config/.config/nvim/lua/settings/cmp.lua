@@ -10,6 +10,7 @@ vim.api.nvim_set_hl(0, "CmpItemKindTabnine", { fg = "#CA42F0" })
 vim.api.nvim_set_hl(0, "CmpItemKindEmoji", { fg = "#FDE030" })
 vim.api.nvim_set_hl(0, "CmpItemKindCrate", { fg = "#F64D00" })
 
+---@diagnostic disable-next-line: missing-fields
 cmp.setup({
   snippet = {
     -- REQUIRED - you must specify a snippet engine
@@ -31,6 +32,7 @@ cmp.setup({
       completion = cmp.config.window.bordered(),
       documentation = cmp.config.window.bordered(),
   },
+---@diagnostic disable-next-line: missing-fields
   formatting = {
     fields = { "kind", "abbr", "menu" },
     format = function(entry, vim_item)
@@ -92,6 +94,7 @@ _G.lsp_organize_imports = function()
 end
 
 -- Use buffer source for `/` (if you enabled `native_menu`, this won't work anymore).
+---@diagnostic disable-next-line: missing-fields
 cmp.setup.cmdline('/', {
   sources = {
     { name = 'buffer' }
@@ -99,6 +102,7 @@ cmp.setup.cmdline('/', {
 })
 
 -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+---@diagnostic disable-next-line: missing-fields
 cmp.setup.cmdline(':', {
   sources = cmp.config.sources({
     { name = 'path' }

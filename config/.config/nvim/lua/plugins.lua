@@ -73,7 +73,7 @@ require("lazy").setup({
   -- "ray-x/lsp_signature.nvim"
 
   {
-	  "nvim-treesitter/nvim-treesitter", 
+	  "nvim-treesitter/nvim-treesitter",
 	  build = ":TSUpdate" --We recommend updating the parsers on update
   },
 
@@ -128,6 +128,7 @@ require("lazy").setup({
         end,
       },
     }, neotest_ns)
+---@diagnostic disable-next-line: missing-fields
     require("neotest").setup({
       -- your neotest config here
       adapters = {
@@ -149,7 +150,7 @@ require("lazy").setup({
   --     end, 100)
   --   end,
   -- }
-  
+  --
   -- Visual improvements
   'yuttie/comfortable-motion.vim',
 

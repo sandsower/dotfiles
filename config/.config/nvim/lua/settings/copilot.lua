@@ -1,4 +1,4 @@
-local copilot = require'copilot' 
+local copilot = require'copilot'
 
 copilot.setup {
   cmp = {
