@@ -30,7 +30,8 @@ M.setup = function(on_attach)
     default_timeout = 5000,
   })
   require("mason-null-ls").setup({
-    ensure_installed = true,
+---@diagnostic disable-next-line: assign-type-mismatch
+    ensure_installed = nil,
     automatic_installation = true,
     automatic_setup = true,
   })
