@@ -7,7 +7,7 @@
         picom -b 
         ~/xborder/xborders -c ~/.config/picom/xborder.json
     ) &
-    ~/.config/polybar/launch.sh
+    # ~/.config/polybar/launch.sh
 ) &
 
 # Services

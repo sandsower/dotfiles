@@ -87,7 +87,7 @@
 
     # Defines width in pixels of frame around the notification window.
     # Set to 0 to disable.
-    frame_width = 2
+    frame_width = 1
 
     # Define a color for the separator.
     # possible values are:
@@ -109,7 +109,7 @@
 
     ### Text ###
 
-    font = JetBrainsMono Nerd Font Medium 9
+    font = FiraCode Nerd Font Mono Medium 9
 
     # The spacing between lines.  If the height is smaller than the
     # font height, it will get raised to the font height.
@@ -430,13 +430,13 @@
 [urgency_low]
     background = "#191D24"
     foreground = "#E5E9F0"
-    frame_color = "#4C566A"
+    frame_color = "#A3BE8C"
     timeout = 3
 
 [urgency_normal]
     background = "#191D24"
     foreground = "#E5E9F0"
-    frame_color = "#8FBCBB"
+    frame_color = "#EBCB8B"
     timeout = 15
 
 [urgency_critical]

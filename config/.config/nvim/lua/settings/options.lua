@@ -29,6 +29,7 @@ tabstop= 2,
 expandtab= true,
 softtabstop= 2,
 shiftwidth= 2,
+relativenumber= true,
 
 mouse = "a",
 
