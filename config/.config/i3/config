@@ -290,6 +290,8 @@ bindsym $mod+p exec /usr/local/bin/switch-audio-port
 ## App shortcuts
 bindsym $mod+w exec /usr/bin/firefox
 bindsym $mod+n exec /usr/bin/thunar
+bindsym $mod+i exec /usr/bin/slack
+bindsym $mod+u exec /usr/bin/spotify-launcher
 bindsym Print exec scrot ~/%Y-%m-%d-%T-screenshot.png && notify-send "Screenshot saved to ~/$(date +"%Y-%m-%d-%T")-screenshot.png"
 
 # Power Profiles menu switcher (rofi)
@@ -304,9 +306,9 @@ bindsym $mod+Shift+p exec ~/.config/i3/scripts/power-profiles
 set $ws1 "1:"
 set $ws2 "2:"
 set $ws3 "3:"
-set $ws4 "4:"
+set $ws4 "4:♫"
 set $ws5 "5:"
-set $ws6 "6:♫"
+set $ws6 "6:"
 set $ws7 "7"
 set $ws8 "8"
 set $ws9 "9"
@@ -325,15 +327,15 @@ set $ws10 "10"
 assign [class="Xfce4-terminal"] $ws1
 assign [class="(?i)firefox"] $ws2
 assign [class="Thunar"] $ws3
-assign [class="thunderbird"] $ws4
-assign [class="TelegramDesktop"] $ws5
+assign [class="spotify-launcher"] $ws4
+assign [class="slack"] $ws5
 
 # automatic set focus new window if it opens on another workspace than the current:
 for_window [class=Xfce4-terminal] focus
 for_window [class=(?i)firefox] focus
 for_window [class=Thunar] focus
-for_window [class=Thunderbird] focus
-for_window [class=TelegramDesktop] focus
+for_window [class=spotify-launcher] focus
+for_window [class=slack] focus
 
 ##############
 # compositor #
