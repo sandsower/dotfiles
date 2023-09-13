@@ -14,7 +14,7 @@ vim.opt.rtp:prepend(lazypath)
 require("lazy").setup({
   -- Plugin Section
   --ColorSchemes
-  {"morhetz/gruvbox", lazy = true},
+  { "morhetz/gruvbox",                          lazy = true },
   "mhartington/oceanic-next",
   "drewtempelmeyer/palenight.vim",
 
@@ -56,6 +56,7 @@ require("lazy").setup({
       'simrat39/inlay-hints.nvim'
     },
   },
+  "williamboman/mason.nvim",
 
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -68,13 +69,11 @@ require("lazy").setup({
     },
   },
 
-  "williamboman/mason.nvim",
-
   -- "ray-x/lsp_signature.nvim"
 
   {
-	  "nvim-treesitter/nvim-treesitter",
-	  build = ":TSUpdate" --We recommend updating the parsers on update
+    "nvim-treesitter/nvim-treesitter",
+    build = ":TSUpdate" --We recommend updating the parsers on update
   },
 
   -- Terminal
@@ -99,44 +98,47 @@ require("lazy").setup({
   "ThePrimeagen/refactoring.nvim",
 
   --Fuzzy finder/movement
-  {'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+  { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
   "nvim-telescope/telescope.nvim",
   "phaazon/hop.nvim",
 
-  --File Tree 
+  --File Tree
   "kyazdani42/nvim-web-devicons", --for file icons,
-  {"kyazdani42/nvim-tree.lua", lazy = true},
+  { "kyazdani42/nvim-tree.lua", lazy = true },
   "jparise/vim-graphql",
 
   --Tests
   "vim-test/vim-test",
   {
-  "nvim-neotest/neotest",
-  dependencies = {
-    "nvim-neotest/neotest-go",
-    -- Your other test adapters here
+    "nvim-neotest/neotest",
+    dependencies = {
+      "nvim-neotest/neotest-go",
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+      "antoinemadec/FixCursorHold.nvim"
+      -- Your other test adapters here
+    },
+    config = function()
+      -- get neotest namespace (api call creates or returns namespace)
+      local neotest_ns = vim.api.nvim_create_namespace("neotest")
+      vim.diagnostic.config({
+        virtual_text = {
+          format = function(diagnostic)
+            local message =
+                diagnostic.message:gsub("\n", " "):gsub("\t", " "):gsub("%s+", " "):gsub("^%s+", "")
+            return message
+          end,
+        },
+      }, neotest_ns)
+      ---@diagnostic disable-next-line: missing-fields
+      require("neotest").setup({
+        -- your neotest config here
+        adapters = {
+          require("neotest-go"),
+        },
+      })
+    end,
   },
-  config = function()
-    -- get neotest namespace (api call creates or returns namespace)
-    local neotest_ns = vim.api.nvim_create_namespace("neotest")
-    vim.diagnostic.config({
-      virtual_text = {
-        format = function(diagnostic)
-          local message =
-            diagnostic.message:gsub("\n", " "):gsub("\t", " "):gsub("%s+", " "):gsub("^%s+", "")
-          return message
-        end,
-      },
-    }, neotest_ns)
----@diagnostic disable-next-line: missing-fields
-    require("neotest").setup({
-      -- your neotest config here
-      adapters = {
-        require("neotest-go"),
-      },
-    })
-  end,
-},
 
   -- Copilot
   "github/copilot.vim",
@@ -156,11 +158,11 @@ require("lazy").setup({
 
   --Statusline
   {
-	  'glepnir/galaxyline.nvim',
-	  branch = 'main',
-	  -- some optional icons
-	  dependencies = { 'kyazdani42/nvim-web-devicons', lazy = true },
-	},
+    'glepnir/galaxyline.nvim',
+    branch = 'main',
+    -- some optional icons
+    dependencies = { 'kyazdani42/nvim-web-devicons', lazy = true },
+  },
 
   -- Harpoon
   "ThePrimeagen/harpoon",
@@ -169,7 +171,7 @@ require("lazy").setup({
   "simrat39/rust-tools.nvim",
 
   -- Scala
-  {'scalameta/nvim-metals', dependencies = { "nvim-lua/plenary.nvim" }},
+  { 'scalameta/nvim-metals',    dependencies = { "nvim-lua/plenary.nvim" } },
 
   -- Golang
   'mfussenegger/nvim-dap',

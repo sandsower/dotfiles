@@ -7,6 +7,13 @@ local keymap = vim.api.nvim_set_keymap
 keymap("", "<Space>", "<Nop>", opts)
 vim.g.mapleader = " "
 vim.g.maplocalleader = ","
+local wk = require("which-key")
+
+
+wk.register({
+  ["<leader>a"] = { "<cmd>lua require('harpoon.mark').add_file()<cr>", "Harpoon: Add File" },
+  ["<C-e>"] = { "<cmd>lua require('harpoon.ui').toggle_quick_menu()<cr>", "Harpoon: Toggle Quick Menu" },
+})
 
 -- Telescope
 keymap("n", "<leader>ff", "<cmd>Telescope git_files<cr>", opts)
@@ -46,8 +53,12 @@ keymap("n", "<leader>b", ":Git blame<CR>", opts)
 -- NeoTest
 keymap("n", "<leader>tt", "<cmd>lua require('neotest').run.run()<CR>", opts)
 keymap("n", "<leader>tf", "<cmd>lua require('neotest').run.run(vim.fn.expand('%'))<CR>", opts)
-keymap("n", "<leader>ts", "<cmd>lua require('neotest').run.run(vim.fn.getcwd())<CR>", opts)
 keymap("n", "<leader>to", "<cmd>lua require('neotest').summary.toggle()<CR>", opts)
+wk.register({
+  ["<leader>tt"] = { "<cmd>lua require('neotest').run.run()<cr>", "Run nearest tests" },
+  ["<leader>tf"] = { "<cmd>lua require('neotest').run.run(vim.fn.expand('%'))<CR>", "Run the current test file" },
+  ["<leader>to"] = { "<cmd>lua require('neotest').summary.toggle()<CR>", "Toggle Neotest summary" },
+})
 
 
 -- Clipboard
@@ -71,7 +82,7 @@ keymap("n", "<A-k>", "<Esc>:m .-2<CR>==gi", opts)
 keymap("i", "jk", "<ESC>", opts)
 
 -- Visual --
--- Stay in indent mode
+-- Stay in visual mode
 keymap("v", "<", "<gv", opts)
 keymap("v", ">", ">gv", opts)
 
