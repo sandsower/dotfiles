@@ -100,6 +100,7 @@ local servers = {
   "rust_analyzer",
   "tflint",
   "lua_ls",
+  "csharp_ls",
 }
 
 local mason_lspconfig = require 'mason-lspconfig'

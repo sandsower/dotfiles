@@ -75,6 +75,7 @@ require("lazy").setup({
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate" --We recommend updating the parsers on update
   },
+  'nvim-treesitter/nvim-treesitter-context',
 
   -- Terminal
   'voldikss/vim-floaterm',
