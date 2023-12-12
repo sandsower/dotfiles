@@ -152,5 +152,7 @@ export PYTHONBIN=$HOME/.local/bin
 export PATH="/usr/local/opt/openjdk/bin:$PATH:$GOPATH:$GOBIN:$PYTHONBIN"
 
 export GOPRIVATE=github.com/gv-sothebys-vic
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
 source ~/.private_commands.sh
+export PATH="/opt/homebrew/opt/dotnet@6/bin:$PATH"

@@ -16,7 +16,7 @@ wk.register({
 })
 
 -- Telescope
-keymap("n", "<leader>ff", "<cmd>Telescope git_files<cr>", opts)
+keymap("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
 keymap("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", opts)
 keymap("n", "<leader>fb", "<cmd>Telescope buffers<cr>", opts)
 keymap("n", "<leader>fs", "<cmd>Telescope grep_string<cr>", opts)
@@ -33,6 +33,7 @@ keymap("n", "<leader>gs", "<cmd>Telescope git_status<cr>", opts)
 keymap("n", "<leader>gb", "<cmd>Telescope git_branches<cr>", opts)
 keymap("n", "<leader>gc", "<cmd>Telescope git_commits<cr>", opts)
 keymap("n", "<leader>gC", "<cmd>Telescope git_bcommits<cr>", opts)
+keymap("n", "<leader>gf", "<cmd>Telescope git_files<cr>", opts)
 
 -- Navigation
 keymap("n", "<C-h>", "<C-w>h", opts)
@@ -76,6 +77,9 @@ keymap("n", "<leader>r", ":NvimTreeRefresh<CR>", opts)
 -- Move text up and down
 keymap("n", "<A-j>", "<Esc>:m .+1<CR>==gi", opts)
 keymap("n", "<A-k>", "<Esc>:m .-2<CR>==gi", opts)
+
+-- Quick save
+keymap("n", "<leader>w", ":w<CR>", opts)
 
 -- Insert --
 -- Press jk fast to enter
