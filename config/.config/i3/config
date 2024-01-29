@@ -180,6 +180,10 @@ bindcode $mod+Shift+90 	 move container to workspace  $ws10
 
 #bindsym $mod+r mode "resize"
 
+# move focused workspace between outputs
+bindsym $mod+Shift+n  move workspace to output right
+# bindsym $mod+less  move workspace to output left
+
 ######################################
 # keybindings for different actions: #
 ######################################
@@ -263,7 +267,7 @@ bindsym $mod+space focus mode_toggle
 bindsym $mod+a focus parent
 
 # open new empty workspace
-bindsym $mod+Shift+n exec ~/.config/i3/scripts/empty_workspace
+# bindsym $mod+Shift+n exec ~/.config/i3/scripts/empty_workspace
 
 # Multimedia Keys
 
@@ -376,7 +380,7 @@ exec --no-startup-id dex --autostart --environment i3
 #exec --no-startup-id numlockx on
 
 # picom compositor
-exec_always --no-startup-id picom --config ~/.config/picom/picom.conf
+exec_always --no-startup-id picom --config ~/.config/picom/picom.conf --experimental-backends
 
 # start dunst notification daemon
 exec --no-startup-id dbus-launch dunst --config ~/.config/dunst/dunstrc

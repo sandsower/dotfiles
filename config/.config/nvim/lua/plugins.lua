@@ -78,7 +78,7 @@ require("lazy").setup({
   'nvim-treesitter/nvim-treesitter-context',
 
   -- Terminal
-  'voldikss/vim-floaterm',
+  "akinsho/nvim-toggleterm.lua",
 
   --Autopair/surround
   "tpope/vim-surround",
