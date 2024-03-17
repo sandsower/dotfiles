@@ -99,8 +99,6 @@ local servers = {
   "tsserver",
   "rust_analyzer",
   "tflint",
-  "lua_ls",
-  "omnisharp",
 }
 
 local mason_lspconfig = require 'mason-lspconfig'

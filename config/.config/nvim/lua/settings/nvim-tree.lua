@@ -9,7 +9,6 @@ require'nvim-tree'.setup {
   },
   renderer = {
     highlight_git = true,
-    highlight_opened_files = "3",
     add_trailing = true,
     group_empty = true,
     icons = {

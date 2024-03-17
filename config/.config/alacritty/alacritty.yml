@@ -898,7 +898,7 @@ font:
     family: FiraCode Nerd Font Mono
     style: Bold
 
-  size: 10 
+  size: 9 
 
 env:
   TERM: xterm-256color
