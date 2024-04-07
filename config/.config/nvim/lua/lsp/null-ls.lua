@@ -13,12 +13,12 @@ local sources = {
   -- null_ls.builtins.diagnostics.revive,
 
    -- postgres
-  null_ls.builtins.formatting.sqlfluff.with({
-    extra_args = {"--dialect", "postgres"}
-  }),
-  null_ls.builtins.diagnostics.sqlfluff.with({
-    extra_args = {"--dialect", "postgres"}
-  })
+  -- null_ls.builtins.formatting.sqlfluff.with({
+  --   extra_args = {"--dialect", "postgres"}
+  -- }),
+  -- null_ls.builtins.diagnostics.sqlfluff.with({
+  --   extra_args = {"--dialect", "postgres"}
+  -- })
 }
 
 M.setup = function(on_attach)

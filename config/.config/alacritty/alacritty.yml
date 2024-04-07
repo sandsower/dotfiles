@@ -884,7 +884,7 @@
 font:
   normal:
     family: FiraCode Nerd Font Mono
-    style: Medium
+    style: Retina
 
   bold:
     family: FiraCode Nerd Font Mono

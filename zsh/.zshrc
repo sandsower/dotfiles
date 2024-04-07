@@ -156,6 +156,7 @@ export CARGOBIN=$HOME/.cargo/bin
 export PATH="/usr/local/opt/openjdk/bin:$PATH:$GOPATH:$GOBIN:$PYTHONBIN:$CARGOBIN"
 
 export GOPRIVATE=github.com/gv-sothebys-vic
+typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
 source ~/.private_commands.sh
 

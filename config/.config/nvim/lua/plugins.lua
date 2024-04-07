@@ -171,6 +171,10 @@ require("lazy").setup({
   -- Rust
   "simrat39/rust-tools.nvim",
 
+  -- CSharp
+  -- https://github.com/Decodetalkers/csharpls-extended-lsp.nvim
+  "Decodetalkers/csharpls-extended-lsp.nvim",
+
   -- Scala
   { 'scalameta/nvim-metals',    dependencies = { "nvim-lua/plenary.nvim" } },
 
