@@ -186,4 +186,13 @@ require("lazy").setup({
 
   -- utils
   'andrewradev/linediff.vim',
+
+  -- hightlight
+  {
+    "shellRaining/hlchunk.nvim",
+    event = { "UIEnter" },
+    config = function()
+      require("hlchunk").setup({})
+    end
+  }
 })

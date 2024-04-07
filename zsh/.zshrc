@@ -79,11 +79,14 @@ ZSH_THEME="powerlevel10k/powerlevel10k"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
+  fzf
   zsh-vi-mode
   zsh-autosuggestions
   fzf-zsh-plugin)
 
 source $ZSH/oh-my-zsh.sh
+
+eval "$(zoxide init zsh)"
 
 # User configuration
 
@@ -149,8 +152,14 @@ armageddon() {
 export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
 export PYTHONBIN=$HOME/.local/bin
-export PATH="/usr/local/opt/openjdk/bin:$PATH:$GOPATH:$GOBIN:$PYTHONBIN"
+export CARGOBIN=$HOME/.cargo/bin
+export PATH="/usr/local/opt/openjdk/bin:$PATH:$GOPATH:$GOBIN:$PYTHONBIN:$CARGOBIN"
 
 export GOPRIVATE=github.com/gv-sothebys-vic
 
 source ~/.private_commands.sh
+
+alias cat="bat"
+alias ls="eza"
+alias cd="z"
+source /usr/share/nvm/init-nvm.sh

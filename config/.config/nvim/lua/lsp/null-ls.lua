@@ -10,7 +10,7 @@ local sources = {
 
   -- golang
   null_ls.builtins.diagnostics.golangci_lint,
-  null_ls.builtins.diagnostics.revive,
+  -- null_ls.builtins.diagnostics.revive,
 
    -- postgres
   null_ls.builtins.formatting.sqlfluff.with({
@@ -23,7 +23,7 @@ local sources = {
 
 M.setup = function(on_attach)
   null_ls.setup({
-    debug = true,
+      debug = true,
     sources = sources,
     on_attach = on_attach,
     debounce = 1000,

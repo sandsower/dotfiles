@@ -189,7 +189,7 @@ bindsym $mod+Shift+n  move workspace to output right
 ######################################
 
 # start a terminal
-bindsym $mod+Return exec alacritty
+bindsym $mod+Return exec kitty
 
 # kill focused window
 bindsym $mod+q kill
@@ -201,7 +201,7 @@ bindsym $mod+Shift+e exec ~/.config/i3/scripts/powermenu
 bindsym $mod+Escape exec "betterlockscreen --lock --display 1"
 
 # CPU monitor
-bindsym $mod+m exec alacritty -e btop
+bindsym $mod+m exec kitty -e btop
 
 # reload the configuration file
 bindsym $mod+Shift+c reload
@@ -380,7 +380,7 @@ exec --no-startup-id dex --autostart --environment i3
 #exec --no-startup-id numlockx on
 
 # picom compositor
-exec_always --no-startup-id picom --config ~/.config/picom/picom.conf --experimental-backends
+exec_always --no-startup-id picom -b --config ~/.config/picom/picom.conf
 
 # start dunst notification daemon
 exec --no-startup-id dbus-launch dunst --config ~/.config/dunst/dunstrc
@@ -421,8 +421,9 @@ exec --no-startup-id xset s 480 dpms 600 600 600
 #exec_always --no-startup-id autotiling
 
 # Autostart apps as you like
-exec --no-startup-id sleep 2 && alacritty
+exec --no-startup-id sleep 2 && kitty
 exec --no-startup-id sleep 7 && firefox 
+exec --no-startup-id sleep 10 && slack
 #https://github.com/endeavouros-team/endeavouros-i3wm-setup/blob/main/force-knowledge.md
 #exec --no-startup-id sleep 3 && thunar
 
