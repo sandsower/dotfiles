@@ -99,6 +99,7 @@ local servers = {
   "tsserver",
   "rust_analyzer",
   "tflint",
+  "tailwindcss",
 }
 
 local mason_lspconfig = require 'mason-lspconfig'
@@ -125,6 +126,13 @@ mason_lspconfig.setup_handlers {
   end,
   ["rust_analyzer"] = function()
     require("lsp.rust-analyzer").setup(on_attach, capabilities)
+  end,
+  ["htmx"] = function()
+    require('lspconfig').htmx.setup({
+      capabilities = capabilities,
+      on_attach = on_attach,
+      filetypes = { "html", "gleam" },
+    })
   end,
 }
 

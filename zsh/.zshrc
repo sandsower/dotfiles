@@ -153,7 +153,8 @@ export GOPATH=$HOME/go
 export GOBIN=$GOPATH/bin
 export PYTHONBIN=$HOME/.local/bin
 export CARGOBIN=$HOME/.cargo/bin
-export PATH="/usr/local/opt/openjdk/bin:$PATH:$GOPATH:$GOBIN:$PYTHONBIN:$CARGOBIN"
+export LOCALBIN=$HOME/bin
+export PATH="/usr/local/opt/openjdk/bin:$PATH:$GOPATH:$GOBIN:$PYTHONBIN:$CARGOBIN:$LOCALBIN"
 
 export GOPRIVATE=github.com/gv-sothebys-vic
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
