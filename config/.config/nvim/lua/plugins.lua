@@ -55,6 +55,11 @@ require("lazy").setup({
       'jose-elias-alvarez/typescript.nvim',
       'simrat39/inlay-hints.nvim'
     },
+    -- opts = {
+    --   servers = {
+    --     gleam = { mason = false },
+    --   },
+    -- },
   },
   "williamboman/mason.nvim",
 
@@ -73,6 +78,11 @@ require("lazy").setup({
 
   {
     "nvim-treesitter/nvim-treesitter",
+    opts = function(_, opts)
+      if type(opts.ensure_installed) == "table" then
+        vim.list_extend(opts.ensure_installed, { "gleam" })
+      end
+    end,
     build = ":TSUpdate" --We recommend updating the parsers on update
   },
   'nvim-treesitter/nvim-treesitter-context',
@@ -116,7 +126,8 @@ require("lazy").setup({
       "nvim-neotest/neotest-go",
       "nvim-lua/plenary.nvim",
       "nvim-treesitter/nvim-treesitter",
-      "antoinemadec/FixCursorHold.nvim"
+      "antoinemadec/FixCursorHold.nvim",
+      "nvim-neotest/nvim-nio"
       -- Your other test adapters here
     },
     config = function()
@@ -185,18 +196,28 @@ require("lazy").setup({
   'ray-x/go.nvim',
   'ray-x/guihua.lua',
 
+  -- Gleam
+  {
+    "JoosepAlviste/nvim-ts-context-commentstring",
+    opts = {
+      languages = {
+        gleam = "// %s",
+      },
+    },
+  },
+
   -- Protobuf_
   'wfxr/protobuf.vim',
 
   -- utils
   'andrewradev/linediff.vim',
 
-  -- hightlight
-  {
-    "shellRaining/hlchunk.nvim",
-    event = { "UIEnter" },
-    config = function()
-      require("hlchunk").setup({})
-    end
-  }
+  -- -- hightlight
+  -- {
+  --   "shellRaining/hlchunk.nvim",
+  --   event = { "UIEnter" },
+  --   config = function()
+  --     require("hlchunk").setup({})
+  --   end
+  -- }
 })

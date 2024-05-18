@@ -109,7 +109,6 @@ mason_lspconfig.setup {
 }
 
 require('lspconfig').gleam.setup {
-  cmd = { "glas", "--stdio" },
   on_attach = on_attach,
   capabilities = capabilities,
 }

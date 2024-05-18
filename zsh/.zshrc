@@ -154,7 +154,8 @@ export GOBIN=$GOPATH/bin
 export PYTHONBIN=$HOME/.local/bin
 export CARGOBIN=$HOME/.cargo/bin
 export LOCALBIN=$HOME/bin
-export PATH="/usr/local/opt/openjdk/bin:$PATH:$GOPATH:$GOBIN:$PYTHONBIN:$CARGOBIN:$LOCALBIN"
+export FLYBIN=$HOME/.fly
+export PATH="/usr/local/opt/openjdk/bin:$PATH:$GOPATH:$GOBIN:$PYTHONBIN:$CARGOBIN:$LOCALBIN:$FLYBIN"
 
 export GOPRIVATE=github.com/gv-sothebys-vic
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
@@ -165,3 +166,11 @@ alias cat="bat"
 alias ls="eza"
 alias cd="z"
 source /usr/share/nvm/init-nvm.sh
+
+# pnpm
+export PNPM_HOME="/home/sandsower/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
