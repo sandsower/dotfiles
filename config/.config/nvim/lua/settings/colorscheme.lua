@@ -1,5 +1,5 @@
 
-local colorscheme = "gruvbox"
+local colorscheme = "catppuccin-mocha"
 
 ---@diagnostic disable-next-line: param-type-mismatch
 local status_ok, _ = pcall(vim.cmd, "colorscheme " .. colorscheme)

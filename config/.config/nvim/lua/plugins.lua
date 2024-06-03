@@ -220,4 +220,6 @@ require("lazy").setup({
   --     require("hlchunk").setup({})
   --   end
   -- }
+  -- themes
+  { "catppuccin/nvim", name = "catppuccin", priority = 1000 }
 })

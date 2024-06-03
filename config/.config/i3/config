@@ -621,4 +621,4 @@ bindsym $mod+Shift+s exec xfce4-screenshooter
 ####################
 
 # Set wallpaper
-exec --no-startup-id sleep 1 && feh --bg-fill ~/.wallpapers/National_Park.jpg  
+exec --no-startup-id sleep 1 && feh --bg-scale ~/.wallpapers/National_Park.jpg  
