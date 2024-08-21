@@ -198,7 +198,7 @@ bindsym $mod+q kill
 bindsym $mod+Shift+e exec ~/.config/i3/scripts/powermenu
 
 # Lock the screen.
-bindsym $mod+Escape exec "betterlockscreen --lock --display 1"
+bindsym $mod+Shift+m exec "betterlockscreen --lock --display 1"
 
 # CPU monitor
 bindsym $mod+m exec kitty -e btop
@@ -421,7 +421,7 @@ exec --no-startup-id xset -dpms
 
 # Autostart apps as you like
 exec --no-startup-id sleep 2 && kitty
-exec --no-startup-id sleep 7 && firefox 
+exec --no-startup-id sleep 7 && firefox
 exec --no-startup-id sleep 10 && slack
 #https://github.com/endeavouros-team/endeavouros-i3wm-setup/blob/main/force-knowledge.md
 #exec --no-startup-id sleep 3 && thunar
