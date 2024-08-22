@@ -50,6 +50,7 @@ keymap("v", "<leader>l", "<cmd>HopLine<CR>", opts)
 -- Git
 -- Using lazygit directly for the rest
 keymap("n", "<leader>b", ":Git blame<CR>", opts)
+keymap("n", "<leader>n", ":Gitsigns next_hunk<CR>", opts)
 
 -- NeoTest
 keymap("n", "<leader>tt", "<cmd>lua require('neotest').run.run()<CR>", opts)

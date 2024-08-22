@@ -174,3 +174,9 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+
+alias caretask_dev='aws ecs list-tasks --region=us-east-2 --cluster cluster-dev --family care-task-dev --output json | jq --raw-output ".taskArns[0]"'
+alias caretask_prod='aws ecs list-tasks --region=eu-west-1 --cluster cluster-prod --family care-task-prod --output json | jq --raw-output ".taskArns[0]"'
+
+alias execprod='aws ecs execute-command --region=eu-west-1 --cluster cluster-prod --task $(caretask_prod) --container care-container-prod --command sh --interactive'
+alias execdev='aws ecs execute-command --region=us-east-2 --cluster cluster-dev --task $(caretask_dev) --container care-container-dev --command sh --interactive'
