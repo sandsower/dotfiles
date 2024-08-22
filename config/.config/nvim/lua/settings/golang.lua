@@ -16,7 +16,7 @@ vim.g["go_highlight_fields"] = 1
 
 require('go').setup({
   goimport = "gopls", -- if set to 'gopls', it will use golsp's goimports instead of goimports
-  gofmt = "gopls", -- if set to 'gopls', it will use golsp's gofmt instead of gofmt
+  gofmt = "gofmt", -- if set to 'gopls', it will use golsp's gofmt instead of gofmt
   max_line_len = 120,
   tag_transform = false,
   test_dir = "",
