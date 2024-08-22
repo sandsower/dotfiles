@@ -165,6 +165,7 @@ source ~/.private_commands.sh
 alias cat="bat"
 alias ls="eza"
 alias cd="z"
+alias nx="npx nx"
 source /usr/share/nvm/init-nvm.sh
 
 # pnpm

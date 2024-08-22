@@ -5,3 +5,5 @@
 	email = victor@gangverk.is
 [init]
 	templatedir = ~/.git-templates
+[pull]
+	rebase = false
