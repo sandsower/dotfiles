@@ -181,3 +181,5 @@ alias caretask_prod='aws ecs list-tasks --region=eu-west-1 --cluster cluster-pro
 
 alias execprod='aws ecs execute-command --region=eu-west-1 --cluster cluster-prod --task $(caretask_prod) --container care-container-prod --command sh --interactive'
 alias execdev='aws ecs execute-command --region=us-east-2 --cluster cluster-dev --task $(caretask_dev) --container care-container-dev --command sh --interactive'
+
+alias gcrb='git for-each-ref --sort=-committerdate --count=30 --format='\''%(refname:short)'\'' refs/heads/ | fzf --height=20% --reverse --info=inline | xargs git checkout'
