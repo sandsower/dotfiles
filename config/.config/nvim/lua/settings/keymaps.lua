@@ -9,10 +9,9 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = ","
 local wk = require("which-key")
 
-
-wk.register({
-  ["<leader>a"] = { "<cmd>lua require('harpoon.mark').add_file()<cr>", "Harpoon: Add File" },
-  ["<C-e>"] = { "<cmd>lua require('harpoon.ui').toggle_quick_menu()<cr>", "Harpoon: Toggle Quick Menu" },
+wk.add({
+  { "<leader>a", "<cmd>lua require('harpoon.mark').add_file()<cr>", desc = "Harpoon: Add File" },
+  { "<C-e>", "<cmd>lua require('harpoon.ui').toggle_quick_menu()<cr>", desc = "Harpoon: Toggle Quick Menu" },
 })
 
 -- Telescope
@@ -56,10 +55,10 @@ keymap("n", "<leader>n", ":Gitsigns next_hunk<CR>", opts)
 keymap("n", "<leader>tt", "<cmd>lua require('neotest').run.run()<CR>", opts)
 keymap("n", "<leader>tf", "<cmd>lua require('neotest').run.run(vim.fn.expand('%'))<CR>", opts)
 keymap("n", "<leader>to", "<cmd>lua require('neotest').summary.toggle()<CR>", opts)
-wk.register({
-  ["<leader>tt"] = { "<cmd>lua require('neotest').run.run()<cr>", "Run nearest tests" },
-  ["<leader>tf"] = { "<cmd>lua require('neotest').run.run(vim.fn.expand('%'))<CR>", "Run the current test file" },
-  ["<leader>to"] = { "<cmd>lua require('neotest').summary.toggle()<CR>", "Toggle Neotest summary" },
+wk.add({
+  { "<leader>tt", "<cmd>lua require('neotest').run.run()<cr>", desc = "Run nearest tests" },
+  { "<leader>tf", "<cmd>lua require('neotest').run.run(vim.fn.expand('%'))<CR>", desc = "Run the current test file" },
+  { "<leader>to", "<cmd>lua require('neotest').summary.toggle()<CR>", desc = "Toggle Neotest summary" },
 })
 
 

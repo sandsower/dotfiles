@@ -49,9 +49,42 @@ require("lazy").setup({
       -- Additional lua configuration, makes nvim stuff amazing
       'folke/neodev.nvim',
 
-      -- Linters and formatters
-      'jose-elias-alvarez/null-ls.nvim',
-      'jay-babu/mason-null-ls.nvim',
+      -- Formatter plugin
+      {
+        'stevearc/conform.nvim',
+        config = function()
+          -- Add Mason's bin directory to PATH so conform can find formatters
+          vim.env.PATH = vim.env.PATH .. ":" .. vim.fn.stdpath("data") .. "/mason/bin"
+
+          require('conform').setup({
+            formatters_by_ft = {
+              javascript = { "prettier" },
+              typescript = { "prettier" },
+              javascriptreact = { "prettier" },
+              typescriptreact = { "prettier" },
+              json = { "prettier" },
+              html = { "prettier" },
+              css = { "prettier" },
+              scss = { "prettier" },
+              markdown = { "prettier" },
+              yaml = { "prettier" },
+              go = { "gofmt" },
+              rust = { "rustfmt" },
+            },
+            format_on_save = function(bufnr)
+              -- Don't format if buffer is not modifiable
+              if not vim.bo[bufnr].modifiable then
+                return
+              end
+              return {
+                lsp_fallback = true,
+                timeout_ms = 2000,
+              }
+            end,
+            notify_on_error = true,  -- Show errors when formatting fails
+          })
+        end,
+      },
       'jose-elias-alvarez/typescript.nvim',
       'simrat39/inlay-hints.nvim'
     },
@@ -61,7 +94,6 @@ require("lazy").setup({
     --   },
     -- },
   },
-  "williamboman/mason.nvim",
 
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
@@ -78,12 +110,8 @@ require("lazy").setup({
 
   {
     "nvim-treesitter/nvim-treesitter",
-    opts = function(_, opts)
-      if type(opts.ensure_installed) == "table" then
-        vim.list_extend(opts.ensure_installed, { "gleam" })
-      end
-    end,
-    build = ":TSUpdate" --We recommend updating the parsers on update
+    build = ":TSUpdate", --We recommend updating the parsers on update
+    config = false, -- We configure it manually in settings/nvim-treesitter.lua
   },
   'nvim-treesitter/nvim-treesitter-context',
 
@@ -154,17 +182,7 @@ require("lazy").setup({
 
   -- Copilot
   "github/copilot.vim",
-  -- "zbirenbaum/copilot-cmp"
-  -- {
-  --   "zbirenbaum/copilot.lua",
-  --   event = { "VimEnter" },
-  --   config = function()
-  --     vim.defer_fn(function()
-  --       require "users.copilot"
-  --     end, 100)
-  --   end,
-  -- }
-  --
+
   -- Visual improvements
   'yuttie/comfortable-motion.vim',
 

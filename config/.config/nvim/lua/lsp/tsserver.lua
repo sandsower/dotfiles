@@ -2,7 +2,19 @@ local lspconfig = require("lspconfig")
 
 local M = {}
 M.setup = function(on_attach, capabilities)
-  lspconfig.tsserver.setup({
+  -- Setup typescript.nvim once, globally
+  local ts_ok, typescript = pcall(require, "typescript")
+  if ts_ok then
+    typescript.setup({
+      disable_commands = false,
+      debug = false,
+      go_to_source_definition = {
+        fallback = true,
+      },
+    })
+  end
+
+  lspconfig.ts_ls.setup({
       capabilities = capabilities,
       filetypes = { "javascript", "javascriptreact", "javascript.jsx", "typescript", "typescriptreact", "typescript.tsx" },
       cmd = { "typescript-language-server", "--stdio" },
@@ -10,20 +22,12 @@ M.setup = function(on_attach, capabilities)
         return require("lspconfig.util").root_pattern(".git")(...)
       end,
       on_attach = function(client, bufnr)
+          -- Note: ts_ls doesn't provide built-in formatting
+          -- You'll need to install prettier separately via Mason
           client.server_capabilities.documentFormattingProvider = false
           client.server_capabilities.documentRangeFormattingProvider = false
-          local ts = require("typescript")
-          ts.setup(
-          {
-              disable_commands = false, -- prevent the plugin from creating Vim commands
-              debug = false, -- enable debug logging for commands
-              go_to_source_definition = {
-                  fallback = true, -- fall back to standard LSP definition on failure
-              },
-              server = { -- pass options to lspconfig's setup method
-                  on_attach = on_attach,
-              },
-          })
+
+          -- Call the main on_attach
           on_attach(client, bufnr)
       end,
   })

@@ -2,8 +2,14 @@
 [user]
 # Please adapt and uncomment the following lines:
 	name = Vic Valenzuela 
-	email = victor@gangverk.is
+	email = victor@dala.care
 [init]
 	templatedir = ~/.git-templates
 [pull]
 	rebase = false
+[credential "https://github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/usr/bin/gh auth git-credential

@@ -20,7 +20,7 @@ local on_attach = function(_, bufnr)
   -- require "lsp_signature".on_attach()
 
   vim.cmd("command! LspDef lua vim.lsp.buf.definition()")
-  vim.cmd("command! LspFormatting lua vim.lsp.buf.format()")
+  vim.cmd("command! LspFormatting lua require('conform').format({ async = false, timeout_ms = 3000 })")
   vim.cmd("command! LspCodeAction lua vim.lsp.buf.code_action()")
   vim.cmd("command! LspHover lua vim.lsp.buf.hover()")
   vim.cmd("command! LspRename lua vim.lsp.buf.rename()")
@@ -75,9 +75,8 @@ local on_attach = function(_, bufnr)
   -- buf_map(bufnr, "n", "<Leader>rp", ":RefPrintFunc<CR>", {noremap = true})
   -- buf_map(bufnr, "v", "<Leader>rv", ":RefPrintVar<CR>", {noremap = true})
   -- buf_map(bufnr, "n", "<Leader>rc", ":RefPrintCleanup<CR>", {noremap = true})
-  -- if client.server_capabilities.documentFormattingProvider then
-  --       vim.cmd("autocmd BufWritePre <buffer> lua vim.lsp.buf.format()")
-  -- end
+
+  -- Note: Format on save is now handled by conform.nvim in plugins.lua
 end
 
 require("neodev").setup()
@@ -90,50 +89,65 @@ capabilities = require('cmp_nvim_lsp').default_capabilities(capabilities)
 -- Setup mason so it can manage external tooling
 require('mason').setup()
 
--- Configure linters and formatters
-require("lsp.null-ls").setup(on_attach)
+-- Install formatters via Mason
+local mason_registry = require('mason-registry')
+local formatters = { 'prettier', 'gofmt', 'rustfmt' }
+
+for _, formatter in ipairs(formatters) do
+  local ok, pkg = pcall(mason_registry.get_package, formatter)
+  if ok and not pkg:is_installed() then
+    pkg:install()
+  end
+end
 
 local servers = {
   "gopls",
   "jsonnet_ls",
-  "tsserver",
+  "ts_ls",
   "rust_analyzer",
   "tflint",
   "tailwindcss",
 }
 
-local mason_lspconfig = require 'mason-lspconfig'
+local lspconfig = require('lspconfig')
 
-mason_lspconfig.setup {
-  ensure_installed = servers,
-}
+-- Setup mason-lspconfig for automatic server installation
+local mason_lspconfig_ok, mason_lspconfig = pcall(require, 'mason-lspconfig')
+if mason_lspconfig_ok then
+  mason_lspconfig.setup({
+    ensure_installed = servers,
+    automatic_enable = false, -- We'll set them up manually for custom configs
+  })
+end
 
-require('lspconfig').gleam.setup {
+-- Manual setup for each server with custom configurations
+for _, server in ipairs(servers) do
+  if server == "ts_ls" then
+    require("lsp.tsserver").setup(on_attach, capabilities)
+  elseif server == "rust_analyzer" then
+    require("lsp.rust-analyzer").setup(on_attach, capabilities)
+  elseif server == "gopls" then
+    require("lsp.gopls").setup(on_attach, capabilities)
+  else
+    -- Default setup for other servers
+    lspconfig[server].setup({
+      on_attach = on_attach,
+      capabilities = capabilities,
+    })
+  end
+end
+
+-- Setup additional servers not in the list
+lspconfig.gleam.setup({
   on_attach = on_attach,
   capabilities = capabilities,
-}
+})
 
-mason_lspconfig.setup_handlers {
-  function(server_name)
-    require('lspconfig')[server_name].setup {
-      capabilities = capabilities,
-      on_attach = on_attach,
-    }
-  end,
-  ["tsserver"] = function()
-    require("lsp.tsserver").setup(on_attach, capabilities)
-  end,
-  ["rust_analyzer"] = function()
-    require("lsp.rust-analyzer").setup(on_attach, capabilities)
-  end,
-  ["htmx"] = function()
-    require('lspconfig').htmx.setup({
-      capabilities = capabilities,
-      on_attach = on_attach,
-      filetypes = { "html", "gleam" },
-    })
-  end,
-}
+lspconfig.htmx.setup({
+  capabilities = capabilities,
+  on_attach = on_attach,
+  filetypes = { "html", "gleam" },
+})
 
 -- Turn on lsp status information
 require('fidget').setup()
