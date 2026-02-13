@@ -1,0 +1,10 @@
+[post-create]
+symlink-env = """
+src="{{ primary_worktree_path }}"
+for f in $(cd "$src" && find . -maxdepth 3 -name '.env*' -not -path '*/node_modules/*' 2>/dev/null); do
+  dir=$(dirname "$f")
+  mkdir -p "$dir"
+  ln -sf "$src/$f" "$f"
+  echo "Symlinked: $f -> $src/$f"
+done
+"""

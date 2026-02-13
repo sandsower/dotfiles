@@ -93,7 +93,8 @@ plugins=(
 
 source $ZSH/oh-my-zsh.sh
 
-eval "$(zoxide init zsh)"
+eval "$(zoxide init zsh --cmd cd)"
+eval "$(wt config shell init zsh)"
 
 # User configuration
 
@@ -171,8 +172,10 @@ source ~/.private_commands.sh
 
 alias cat="bat"
 alias ls="eza"
-alias cd="z"
 alias nx="npx nx"
+alias k="kubectl"
+alias kns="kubens"
+alias kx="kubectx"
 source /usr/share/nvm/init-nvm.sh
 
 # pnpm
