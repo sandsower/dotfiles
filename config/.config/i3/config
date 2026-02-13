@@ -189,7 +189,7 @@ bindsym $mod+Shift+n  move workspace to output right
 ######################################
 
 # start a terminal
-bindsym $mod+Return exec kitty
+bindsym $mod+Return exec kitty -e tmux new-session
 
 # kill focused window
 bindsym $mod+q kill
@@ -420,7 +420,7 @@ exec --no-startup-id xset -dpms
 #exec_always --no-startup-id autotiling
 
 # Autostart apps as you like
-exec --no-startup-id sleep 2 && kitty
+exec --no-startup-id sleep 2 && kitty -e tmux new-session
 exec --no-startup-id sleep 7 && firefox
 exec --no-startup-id sleep 10 && slack
 #https://github.com/endeavouros-team/endeavouros-i3wm-setup/blob/main/force-knowledge.md
