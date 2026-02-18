@@ -1,10 +1,44 @@
+worktree-path = "{{ repo_path }}/{{ branch | sanitize }}"
+
 [post-create]
 symlink-env = """
 src="{{ primary_worktree_path }}"
-for f in $(cd "$src" && find . -maxdepth 3 -name '.env*' -not -path '*/node_modules/*' 2>/dev/null); do
+for f in $(cd "$src" && find . -maxdepth 4 -name '.env*' -not -path '*/node_modules/*' 2>/dev/null); do
+  # Skip git-tracked files to avoid typechange noise in git status
+  git ls-files --error-unmatch "$f" >/dev/null 2>&1 && continue
   dir=$(dirname "$f")
   mkdir -p "$dir"
   ln -sf "$src/$f" "$f"
   echo "Symlinked: $f -> $src/$f"
 done
+"""
+symlink-claude = """
+src="{{ primary_worktree_path }}"
+for d in $(cd "$src" && find . -maxdepth 3 -name '.claude' -type d -not -path '*/node_modules/*' 2>/dev/null); do
+  mkdir -p "$d"
+  # Symlink individual items inside .claude, skipping dirs with git-tracked content
+  for item in "$src/$d"/*; do
+    [ -e "$item" ] || continue
+    name=$(basename "$item")
+    rel="$d/$name"
+    if [ -d "$item" ]; then
+      tracked=$(git ls-files "$rel/" 2>/dev/null | head -1)
+    else
+      tracked=$(git ls-files --error-unmatch "$rel" 2>/dev/null && echo "y")
+    fi
+    if [ -z "$tracked" ]; then
+      rm -rf "$rel"
+      ln -sf "$item" "$rel"
+      echo "Symlinked: $rel -> $item"
+    fi
+  done
+done
+"""
+symlink-local-e2e = """
+src="{{ primary_worktree_path }}/frontend/.local-e2e"
+if [ -d "$src" ]; then
+  mkdir -p frontend
+  ln -sf "$src" "frontend/.local-e2e"
+  echo "Symlinked: frontend/.local-e2e -> $src"
+fi
 """

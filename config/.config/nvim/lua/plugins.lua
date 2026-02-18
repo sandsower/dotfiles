@@ -128,6 +128,7 @@ require("lazy").setup({
   --"mhinz/vim-signify"
   "tpope/vim-fugitive",
   "lewis6991/gitsigns.nvim",
+  "sindrets/diffview.nvim",
 
   --Snippets
   "hrsh7th/cmp-vsnip",

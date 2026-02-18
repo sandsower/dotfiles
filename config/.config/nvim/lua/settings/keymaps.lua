@@ -34,6 +34,14 @@ keymap("n", "<leader>gc", "<cmd>Telescope git_commits<cr>", opts)
 keymap("n", "<leader>gC", "<cmd>Telescope git_bcommits<cr>", opts)
 keymap("n", "<leader>gf", "<cmd>Telescope git_files<cr>", opts)
 
+-- Diffview
+wk.add({
+  { "<leader>gd", "<cmd>DiffviewOpen<cr>", desc = "Diff view (working tree)" },
+  { "<leader>gh", "<cmd>DiffviewFileHistory %<cr>", desc = "File history (current)" },
+  { "<leader>gH", "<cmd>DiffviewFileHistory<cr>", desc = "File history (repo)" },
+  { "<leader>gq", "<cmd>DiffviewClose<cr>", desc = "Close diff view" },
+})
+
 -- Navigation
 keymap("n", "<C-h>", "<C-w>h", opts)
 keymap("n", "<C-j>", "<C-w>j", opts)
