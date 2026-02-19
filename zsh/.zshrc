@@ -96,6 +96,26 @@ source $ZSH/oh-my-zsh.sh
 eval "$(zoxide init zsh --cmd cd)"
 eval "$(wt config shell init zsh)"
 
+# Wrap wt so that `wt switch` uses sesh inside tmux
+functions[_wt_original]="$functions[wt]"
+wt() {
+  if [[ -n "$TMUX" && "${1:-}" == "switch" ]]; then
+    local directive_file exit_code=0
+    directive_file="$(mktemp)"
+    WORKTRUNK_DIRECTIVE_FILE="$directive_file" command "${WORKTRUNK_BIN:-wt}" "$@" || exit_code=$?
+    if [[ $exit_code -eq 0 && -s "$directive_file" ]]; then
+      local target
+      target=$(sed "s/^cd '//;s/'$//" "$directive_file")
+      sesh connect "$target"
+    elif [[ -s "$directive_file" ]]; then
+      source "$directive_file"
+    fi
+    rm -f "$directive_file"
+    return "$exit_code"
+  fi
+  _wt_original "$@"
+}
+
 # User configuration
 
 # export MANPATH="/usr/local/man:$MANPATH"

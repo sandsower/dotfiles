@@ -1,7 +1,7 @@
 [[session]]
 name = "Worktrees"
 path = "~/Work/dalacare"
+startup_command = "claude"
 
 [default_session]
-startup_command = "nvim"
 preview_command = "eza --all --git --icons --color=always {}"
