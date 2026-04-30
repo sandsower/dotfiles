@@ -1,0 +1,59 @@
+# Memento Vault configuration template
+# Copy or symlink to ~/.config/memento-vault/memento.yml, then add private/project-specific rules locally.
+
+vault_path: ~/memento
+
+exchange_threshold: 15
+file_count_threshold: 3
+notable_patterns: [plan, design, MEMORY.md, CLAUDE.md, SKILL.md]
+
+qmd_collection: memento
+extra_qmd_collections: []
+
+project_rules: []
+
+retrieval_log: true
+auto_commit: true
+
+agent_model: sonnet
+agent_delay_seconds: 90
+
+session_briefing: true
+briefing_max_notes: 5
+briefing_min_score: 0.3
+
+prompt_recall: true
+recall_min_score: 0.4
+recall_max_notes: 3
+recall_diagnostics: false
+recall_diagnostics_include_candidates: false
+recall_diagnostics_max_candidates: 10
+
+tool_context: true
+tool_context_min_score: 0.4
+tool_context_max_notes: 3
+
+prf_enabled: true
+prf_max_terms: 5
+prf_top_docs: 3
+
+rrf_enabled: true
+rrf_k: 60
+
+pagerank_alpha: 0.85
+pagerank_boost_weight: 0.3
+
+ppr_enabled: true
+ppr_max_expanded: 5
+ppr_alpha: 0.85
+ppr_min_score: 0.01
+
+concept_index_enabled: true
+concept_index_score: 0.5
+project_maps_enabled: true
+
+multi_hop_enabled: true
+multi_hop_max: 2
+
+inception_enabled: true
+inception_backend: codex

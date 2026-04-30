@@ -1,0 +1,20 @@
+model = "gpt-5.5"
+model_reasoning_effort = "high"
+
+# Add per-machine trusted project roots locally after bootstrap.
+# Do not trust the whole home directory in repo-backed config.
+
+[notice.model_migrations]
+"gpt-5.3-codex" = "gpt-5.4"
+
+[features]
+rmcp_client = true
+memories = true
+
+[mcp_servers.linear]
+url = "https://mcp.linear.app/mcp"
+
+# Add private MCP servers locally after bootstrap.
+
+[tui.model_availability_nux]
+"gpt-5.5" = 2

@@ -1,25 +1,12 @@
-# Update system.
-sudo pacman -Syyu
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Get the rust things.
-sudo pacman -S rustup
+cat >&2 <<'EOF'
+This installer is intentionally disabled.
 
-# Now install rust.
-rustup install nightly
+It used to install Rust nightly, clone eww from the default branch, build it,
+and copy the binary into /usr/bin with sudo. Re-enable only after pinning the
+source commit/toolchain and reviewing the build path.
+EOF
 
-# Get dem dependancies.
-sudo pacman -S cairo gtk3 pango gdk-pixbuf2 glib2 gcc-libs glibc
-
-# Build from source.
-mkdir github
-sudo rm -rdf github/ # Make sure it is empty.
-git clone https://github.com/elkowar/eww github/
-cd github/
-cargo build --release
-cd target/release/
-chmod +x eww
-sudo cp -f eww /usr/bin
-
-# Set permissions.
-cd $HOME/.config/eww/
-chmod +x run.sh
+exit 1

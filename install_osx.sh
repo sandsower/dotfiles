@@ -1,19 +1,12 @@
 #!/bin/zsh
+set -euo pipefail
 
-# Install Homebrew
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+cat >&2 <<'EOF'
+This bootstrap script is intentionally disabled.
 
-# Install Homebrew packages
-brew bundle 
+It used to execute installer scripts and clone plugin repositories from moving
+upstream branches. Re-enable only after pinning sources to reviewed versions or
+commits.
+EOF
 
-# Install oh-my-zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-
-# Install tmux plugins 
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-git clone https://github.com/jimeh/tmux-themepack.git ~/.tmux-themepack
-
-# stow dotfiles
-stow config
-stow git
-stow zsh
+exit 1

@@ -19,10 +19,6 @@
 sudo pacman -S "${packages[@]}"
 
 
-# Install tmux plugins 
-#git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
-#git clone https://github.com/jimeh/tmux-themepack.git ~/.tmux-themepack
-
 # stow dotfiles
 #stow config
 #stow git

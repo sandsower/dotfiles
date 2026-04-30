@@ -1,0 +1,14 @@
+{
+  "mcpServers": {
+    "linear": {
+      "command": "mcp-remote",
+      "args": [
+        "https://mcp.linear.app/mcp"
+      ]
+    }
+  },
+  "aliases": {
+    "mcp__plugin_linear_linear__get_issue": "mcp__linear__get_issue",
+    "mcp__plugin_linear_linear__save_comment": "mcp__linear__save_comment"
+  }
+}

@@ -1,8 +1,5 @@
 EndeavourOS i3wm Keybindings cheat sheet:
 
---> to update this run the following command:
-wget --backups=1 https://raw.githubusercontent.com/endeavouros-team/endeavouros-i3wm-setup/main/.config/i3/keybindings -P ~/.config/i3/
-
 All sources and updates are available at GitHub:
 https://github.com/endeavouros-team/endeavouros-i3wm-setup
 

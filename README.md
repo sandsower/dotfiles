@@ -1,5 +1,216 @@
-## My dotfiles
+# Dotfiles
 
-### Install
+Personal dotfiles and safe agent setup.
 
-Just run `install_{os}.sh` to run the installation script
+Security boundary: this repo may contain personal workflow preferences, but it must not contain credentials, work/customer data, or company-specific agent config. Put secrets and private overlays in ignored local files or their owning private repos.
+
+## Install
+
+From a checked-out repo:
+
+```bash
+./install.sh
+```
+
+If you are using Claude, Codex, or pi on a clean machine, tell the agent:
+
+```text
+Read AGENTS.md and install this dotfiles repo end-to-end. Run status first, install safe missing prerequisites, run the dry run, then run the installer and verify the agent surfaces.
+```
+
+The agent-facing procedure lives in `AGENTS.md`. The installer is idempotent and prints what it detects before mutating anything. It refuses to overwrite regular files, refuses to repoint existing AI config symlinks unless `--force-links` is passed, leaves existing non-matching git checkouts untouched, and relies on component installers that are safe to rerun. Preview first with:
+
+```bash
+./install.sh --dry-run
+./install.sh --status
+```
+
+Default install does this:
+
+1. Stows base dotfiles with GNU Stow:
+   - `config/`
+   - `git/`
+   - `zsh/`
+2. Links safe AI config from `ai/`:
+   - pi settings, MCP config, and keybindings
+   - generic Claude instructions and concierge agent
+   - generic Codex config
+   - generic Memento config template
+3. Clones public/open-source setup repos when missing.
+4. Installs Memento Vault.
+5. Installs the Memento pi extension if `pi` exists.
+6. Installs personal pi extensions if `pi` exists.
+7. Installs Beislið/Taumar workflow skills.
+8. Installs pinned `mcp-remote` when `npm` exists.
+
+Skip parts with:
+
+```bash
+./install.sh --no-stow
+./install.sh --no-ai
+./install.sh --no-memento
+./install.sh --no-pi-extensions
+./install.sh --no-beislid
+./install.sh --no-clone
+./install.sh --no-mcp-remote
+./install.sh --force-links
+```
+
+## Expected local checkouts
+
+The installer clones the known public/open-source setup repos below when missing. If a path already exists, it is reused only when its `origin` matches the expected public URL. Non-git directories or different repos are left untouched. It does not clone private repos or restore private overlays.
+
+| Component | Default path | Public clone URL | Purpose |
+|---|---|---|---|
+| Memento Vault | `~/Projects/memento-vault` | `https://github.com/sandsower/memento-vault.git` | durable memory, MCP server, Claude hooks, pi extension |
+| pi extensions | `~/Personal/pi-extensions` | `https://github.com/sandsower/pi-extensions.git` | usage tracker, safety gate, task state, MCP bridge, subagent runner |
+| Beislið/Taumar | `~/Personal/taumar` | `https://github.com/sandsower/beislid.git` | workflow skills and optional show-me pi tools |
+
+Override paths when your machine layout differs:
+
+```bash
+MEMENTO_REPO=~/src/memento-vault \
+PI_EXTENSIONS_REPO=~/src/pi-extensions \
+BEISLID_REPO=~/src/taumar \
+./install.sh
+```
+
+Override clone URLs if a repo moves:
+
+```bash
+MEMENTO_REPO_URL=https://github.com/sandsower/memento-vault.git \
+PI_EXTENSIONS_REPO_URL=https://github.com/sandsower/pi-extensions.git \
+BEISLID_REPO_URL=https://github.com/sandsower/beislid.git \
+./install.sh
+```
+
+## Credentials and private overlays
+
+Do not commit these here:
+
+- API keys, tokens, auth JSON, SSH keys, cookies, or MCP bearer config
+- work-specific agent config, reviewer lists, ticket config, or project rules
+- command aliases that expose private infrastructure
+- session histories, logs, caches, generated state, or local Claude/Codex settings
+
+Use local-only files instead, for example:
+
+- `~/.private_commands.sh` for shell secrets/private aliases
+- `~/.gitconfig.local` for machine/user-specific Git identity
+- `~/.claude/*` for private project agents and ticket workflow config
+- `~/.config/memento-vault/memento.yml` for private Memento project rules after bootstrap
+
+The tracked `git/.gitconfig` includes `~/.gitconfig.local`; create that file locally with your user identity.
+
+## Agent-led setup
+
+A clean agent session should be able to complete setup by following `AGENTS.md`. The top-level installer is intended to be the central setup piece on a new machine, not just a dotfile stow helper.
+
+Agent flow:
+
+1. read the docs and installer
+2. run `./install.sh --status`
+3. install safe missing prerequisites with approval
+4. locate or clone optional component repos
+5. run `./install.sh --dry-run`
+6. run `./install.sh`
+7. verify pi/Claude/Codex surfaces
+8. report missing private overlays without creating or committing them
+
+Use the manual sections below when doing the same work yourself.
+
+## Agent stack setup
+
+### Memento Vault
+
+If the checkout exists, `./install.sh` runs:
+
+```bash
+env MEMENTO_VAULT_PATH="$HOME/Personal/memento" ~/Projects/memento-vault/install.sh --experimental --mcp
+pi install ~/Projects/memento-vault
+```
+
+Manual status checks after install:
+
+```bash
+~/.claude/hooks/memento-status.sh 2>/dev/null || true
+pi --version
+```
+
+Inside pi, run:
+
+```text
+/memento-status
+/memento-queue
+```
+
+### Personal pi extensions
+
+If the checkout exists, `./install.sh` runs:
+
+```bash
+pi install ~/Personal/pi-extensions
+```
+
+Expected pi tools after restart include usage reporting, safety gate, task state, MCP bridge, and subagent runner. Inside pi, check:
+
+```text
+/usage
+/safety
+/tasks
+/mcp
+/subagents
+```
+
+### Beislið/Taumar skills
+
+If the checkout exists, `./install.sh` runs:
+
+```bash
+~/Personal/taumar/install.sh --with-security-hooks --with-pi-show-me
+```
+
+That installs portable workflow skills into supported agent skill directories and optional pi show-me tools.
+
+## Worktrunk setup
+
+`config/.config/worktrunk/config.toml` is intentionally minimal and global-safe. It does not auto-symlink `.env*`, agent config, workflow state, local E2E folders, or `node_modules` into new worktrees.
+
+Those conveniences should be recreated only as trusted per-repo setup or a private local overlay. They are useful for local dev, but not safe as global defaults because they can spread credentials, local agent permissions, or mutable package state into unrelated worktrees.
+
+If you recreate them, keep them opt-in and defensive:
+
+- never commit secret values
+- refuse to overwrite regular files
+- only replace an existing path when it is already the expected symlink
+- avoid sharing `node_modules` unless you explicitly accept cross-worktree dependency state
+- document which repo/worktree layout the hook assumes
+
+## MCP setup
+
+`ai/pi/mcp.json` expects a local `mcp-remote` executable for Linear MCP. Install it outside this repo, pinned through your package manager or global npm tooling:
+
+```bash
+npm install -g mcp-remote@0.1.38
+```
+
+OAuth/auth caches are runtime state and must stay outside this repo.
+
+## Verification before commit
+
+Run these scans before committing dotfiles changes:
+
+```bash
+rg -n -i "api[_-]?key|token|secret|password|bearer|authorization" .
+rg -n -i "<known-private-company-terms>|<known-private-project-paths>|<known-private-key-names>" .
+git status --short
+```
+
+Replace the placeholders with private terms from your local context before publishing or committing. The scans can match documentation. Investigate every hit and make sure it is not a value or private work context.
+
+## Legacy scripts
+
+- `install.sh` is the supported installer.
+- `install_arc.sh` is an old Arch package helper.
+- `install_osx.sh` is disabled until its remote installers are pinned.
+- `config/.config/eww/install.sh` is disabled until its source/toolchain are pinned.

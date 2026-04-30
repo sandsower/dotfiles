@@ -1,7 +1,2 @@
-[[session]]
-name = "Worktrees"
-path = "~/Work/dalacare"
-startup_command = "claude"
-
 [default_session]
 preview_command = "eza --all --git --icons --color=always {}"

@@ -292,7 +292,7 @@ bindsym XF86AudioPrev exec playerctl previous
 bindsym $mod+p exec /usr/local/bin/switch-audio-port
 
 ## App shortcuts
-bindsym $mod+w exec /usr/bin/firefox
+bindsym $mod+w exec --no-startup-id sh -c "rm -f ~/.mozilla/firefox/*.default-release/.parentlock 2>/dev/null; /usr/bin/firefox"
 bindsym $mod+i exec /usr/bin/slack
 bindsym $mod+u exec /usr/bin/spotify-launcher
 bindsym $mod+n exec --no-startup-id /usr/bin/thunar
@@ -386,8 +386,8 @@ exec_always --no-startup-id picom -b --config ~/.config/picom/picom.conf
 exec --no-startup-id dbus-launch dunst --config ~/.config/dunst/dunstrc
 
 
-# configure multiple keyboard layouts and hotkey to switch (Alt+CAPSLOCK in this example)
-exec --no-startup-id setxkbmap -layout 'us,is' -variant altgr-intl,qwerty -option 'grp:alt_caps_toggle'
+# toggle keyboard layout between US and Icelandic
+bindsym $mod+z exec --no-startup-id ~/.config/i3/scripts/toggle-keyboard
 
 # start conky:
 #exec_always --no-startup-id conky
@@ -421,7 +421,7 @@ exec --no-startup-id xset -dpms
 
 # Autostart apps as you like
 exec --no-startup-id sleep 2 && kitty -e tmux new-session
-exec --no-startup-id sleep 7 && firefox
+exec --no-startup-id sleep 7 && sh -c "rm -f ~/.mozilla/firefox/*.default-release/.parentlock 2>/dev/null; firefox"
 exec --no-startup-id sleep 10 && slack
 #https://github.com/endeavouros-team/endeavouros-i3wm-setup/blob/main/force-knowledge.md
 #exec --no-startup-id sleep 3 && thunar
@@ -623,4 +623,4 @@ bindsym $mod+Shift+s exec xfce4-screenshooter
 
 # Set wallpaper
 exec --no-startup-id sleep 1 && feh --bg-scale ~/.wallpapers/National_Park.jpg  
-exec setxkbmap us
+exec --no-startup-id setxkbmap -layout us -variant altgr-intl

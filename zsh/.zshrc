@@ -183,16 +183,17 @@ export PYTHONBIN=$HOME/.local/bin
 export CARGOBIN=$HOME/.cargo/bin
 export LOCALBIN=$HOME/bin
 export FLYBIN=$HOME/.fly
-export PATH="/usr/local/opt/openjdk/bin:$PATH:$GOPATH:$GOBIN:$PYTHONBIN:$CARGOBIN:$LOCALBIN:$FLYBIN"
+export ANDROID_HOME=$HOME/Android/Sdk
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
+export PATH="$LOCALBIN:/usr/local/opt/openjdk/bin:$PATH:$GOPATH:$GOBIN:$PYTHONBIN:$CARGOBIN:$FLYBIN:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/emulator"
 
-export GOPRIVATE=github.com/gv-sothebys-vic
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
 source ~/.private_commands.sh
 
 alias cat="bat"
 alias ls="eza"
-alias nx="npx nx"
+alias nx="npx --no-install nx"
 alias k="kubectl"
 alias kns="kubens"
 alias kx="kubectx"
@@ -206,10 +207,15 @@ case ":$PATH:" in
 esac
 # pnpm end
 
-alias caretask_dev='aws ecs list-tasks --region=us-east-2 --cluster cluster-dev --family care-task-dev --output json | jq --raw-output ".taskArns[0]"'
-alias caretask_prod='aws ecs list-tasks --region=eu-west-1 --cluster cluster-prod --family care-task-prod --output json | jq --raw-output ".taskArns[0]"'
 
-alias execprod='aws ecs execute-command --region=eu-west-1 --cluster cluster-prod --task $(caretask_prod) --container care-container-prod --command sh --interactive'
-alias execdev='aws ecs execute-command --region=us-east-2 --cluster cluster-dev --task $(caretask_dev) --container care-container-dev --command sh --interactive'
 
 alias gcrb='git for-each-ref --sort=-committerdate --count=30 --format='\''%(refname:short)'\'' refs/heads/ | fzf --height=20% --reverse --info=inline | xargs git checkout'
+
+# Clean stale Firefox lock before launching (prevents "already running" error)
+firefox() {
+  rm -f ~/.mozilla/firefox/*.default-release/.parentlock 2>/dev/null
+  command firefox "$@"
+}
+
+# Warm QMD embedding model on shell startup (background, silent)
+command -v qmd &>/dev/null && qmd vsearch "warmup" -c memento -n 1 &>/dev/null &

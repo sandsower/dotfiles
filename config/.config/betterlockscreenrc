@@ -12,7 +12,6 @@ quiet=true
 # i3lockcolor_bin="i3lock-color" # Manually set command for i3lock-color
 
 # Formatting.
-# locktext="Dala what you must."
 locktext=" Locked"
 font="FiraCode Nerd Font Mono"
 time_format="%H:%M"
