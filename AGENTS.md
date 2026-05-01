@@ -43,6 +43,7 @@ Agent flow:
 3. Install safe public prerequisites when normal package managers are available and Vic has approved mutation. Examples:
    - GNU Stow if missing.
    - `mcp-remote@0.1.38` if Linear MCP support is wanted.
+   - `worktrunk@0.46.1` if `cargo` is available.
 4. Treat `./install.sh` as the central new-machine setup entry point. It can clone and install the known public/open-source setup repos when they are missing.
 5. Check optional local checkouts:
    - `MEMENTO_REPO` or `~/Projects/memento-vault`
@@ -60,6 +61,7 @@ Verification commands after install:
 ./install.sh --status
 command -v pi || true
 command -v mcp-remote || true
+command -v wt || true
 ```
 
 Inside pi, check the installed surfaces:

@@ -42,6 +42,7 @@ Default install does this:
 6. Installs personal pi extensions if `pi` exists.
 7. Installs Beislið workflow skills.
 8. Installs pinned `mcp-remote` when `npm` exists.
+9. Installs pinned Worktrunk CLI when `cargo` exists.
 
 Skip parts with:
 
@@ -53,6 +54,7 @@ Skip parts with:
 ./install.sh --no-beislid
 ./install.sh --no-clone
 ./install.sh --no-mcp-remote
+./install.sh --no-worktrunk
 ./install.sh --force-links
 ```
 
@@ -173,6 +175,12 @@ If the checkout exists, `./install.sh` runs:
 That installs portable workflow skills into supported agent skill directories and optional pi show-me tools.
 
 ## Worktrunk setup
+
+If `cargo` exists, `./install.sh` installs the pinned Worktrunk CLI:
+
+```bash
+cargo install worktrunk --version 0.46.1
+```
 
 `config/.config/worktrunk/config.toml` is intentionally minimal and global-safe. It does not auto-symlink `.env*`, agent config, workflow state, local E2E folders, or `node_modules` into new worktrees.
 
