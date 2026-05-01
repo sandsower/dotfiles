@@ -217,5 +217,5 @@ firefox() {
   command firefox "$@"
 }
 
-# Warm QMD embedding model on shell startup (background, silent)
-command -v qmd &>/dev/null && qmd vsearch "warmup" -c memento -n 1 &>/dev/null &
+# Warm QMD embedding model on shell startup (detached, silent)
+[ -x "$HOME/Projects/memento-vault/bin/memento-vault" ] && "$HOME/Projects/memento-vault/bin/memento-vault" warmup >/dev/null 2>&1
