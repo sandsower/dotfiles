@@ -9,13 +9,13 @@
 - Default to `git merge` instead of `git rebase` — only rebase when I explicitly ask for it
 - Linear MCP tools are deferred — always load them via `ToolSearch` (e.g. `+linear get issue`) before first use in a session
 
-## Taumar skill routing
+## Beislið skill routing
 
 Before answering planning, design, or spec questions conversationally, scan the user's prompt for these triggers and invoke the matching skill instead of writing the answer yourself:
 
-- "spec it out", "before you build", "let's discuss before building", "PRD this", "shape this", "discuss and spec" → `taumar:spec`
-- "grill me", "stress test", "challenge this", "poke holes", "push back on this" → `taumar:grill-me`
-- "design this", "plan the implementation", "before I write code", "how should we build" → `taumar:blueprint`
+- "spec it out", "before you build", "let's discuss before building", "PRD this", "shape this", "discuss and spec" → `beislid:spec`
+- "grill me", "stress test", "challenge this", "poke holes", "push back on this" → `beislid:grill-me`
+- "design this", "plan the implementation", "before I write code", "how should we build" → `beislid:blueprint`
 - "create a skill", "modify a skill", "improve this skill", "build a new skill" → `skill-creator`
 
 Auto mode does not bypass these triggers. If a trigger phrase appears, the matching skill must fire even when the request seems clear and direct action seems faster. Conversational answers to these prompts are a routing failure, not a shortcut.
