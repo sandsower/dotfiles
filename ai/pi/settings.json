@@ -18,7 +18,7 @@
         "skills/generic"
       ]
     },
-    "../../Personal/pi-extensions",
-    "../../Personal/beislid/main"
+    "../../Personal/beislid/main",
+    "git:git@github.com:sandsower/pi-extensions.git"
   ]
 }
