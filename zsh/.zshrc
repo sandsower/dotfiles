@@ -91,6 +91,16 @@ plugins=(
   zsh-autosuggestions
   fzf-zsh-plugin)
 
+export GOPATH=$HOME/go
+export GOBIN=$GOPATH/bin
+export PYTHONBIN=$HOME/.local/bin
+export CARGOBIN=$HOME/.cargo/bin
+export LOCALBIN=$HOME/bin
+export FLYBIN=$HOME/.fly
+export ANDROID_HOME=$HOME/Android/Sdk
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
+export PATH="$LOCALBIN:/usr/local/opt/openjdk/bin:$PATH:$GOPATH:$GOBIN:$PYTHONBIN:$CARGOBIN:$FLYBIN:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/emulator"
+
 source $ZSH/oh-my-zsh.sh
 
 eval "$(zoxide init zsh --cmd cd)"
@@ -177,16 +187,6 @@ armageddon() {
     docker rmi -f $(docker images -qa)
 }
 
-export GOPATH=$HOME/go
-export GOBIN=$GOPATH/bin
-export PYTHONBIN=$HOME/.local/bin
-export CARGOBIN=$HOME/.cargo/bin
-export LOCALBIN=$HOME/bin
-export FLYBIN=$HOME/.fly
-export ANDROID_HOME=$HOME/Android/Sdk
-export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
-export PATH="$LOCALBIN:/usr/local/opt/openjdk/bin:$PATH:$GOPATH:$GOBIN:$PYTHONBIN:$CARGOBIN:$FLYBIN:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/emulator"
-
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
 source ~/.private_commands.sh
@@ -217,5 +217,5 @@ firefox() {
   command firefox "$@"
 }
 
-# Warm QMD embedding model on shell startup (background, silent)
-command -v qmd &>/dev/null && qmd vsearch "warmup" -c memento -n 1 &>/dev/null &
+# Warm QMD embedding model on shell startup (detached, silent)
+[ -x "$HOME/Projects/memento-vault/bin/memento-vault" ] && "$HOME/Projects/memento-vault/bin/memento-vault" warmup >/dev/null 2>&1

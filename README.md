@@ -38,10 +38,11 @@ Default install does this:
    - generic Memento config template
 3. Clones public/open-source setup repos when missing.
 4. Installs Memento Vault.
-5. Installs the Memento pi extension if `pi` exists.
+5. Registers the Memento pi package with only the generic skills enabled if `pi` exists.
 6. Installs personal pi extensions if `pi` exists.
-7. Installs Beislið/Taumar workflow skills.
+7. Installs Beislið workflow skills.
 8. Installs pinned `mcp-remote` when `npm` exists.
+9. Installs pinned Worktrunk CLI when `cargo` exists.
 
 Skip parts with:
 
@@ -53,6 +54,7 @@ Skip parts with:
 ./install.sh --no-beislid
 ./install.sh --no-clone
 ./install.sh --no-mcp-remote
+./install.sh --no-worktrunk
 ./install.sh --force-links
 ```
 
@@ -64,14 +66,14 @@ The installer clones the known public/open-source setup repos below when missing
 |---|---|---|---|
 | Memento Vault | `~/Projects/memento-vault` | `https://github.com/sandsower/memento-vault.git` | durable memory, MCP server, Claude hooks, pi extension |
 | pi extensions | `~/Personal/pi-extensions` | `https://github.com/sandsower/pi-extensions.git` | usage tracker, safety gate, task state, MCP bridge, subagent runner |
-| Beislið/Taumar | `~/Personal/taumar` | `https://github.com/sandsower/beislid.git` | workflow skills and optional show-me pi tools |
+| Beislið | `~/Personal/beislid/main` | `https://github.com/sandsower/beislid.git` | workflow skills and optional show-me pi tools; bare repo lives at `~/Personal/beislid.git` |
 
 Override paths when your machine layout differs:
 
 ```bash
 MEMENTO_REPO=~/src/memento-vault \
 PI_EXTENSIONS_REPO=~/src/pi-extensions \
-BEISLID_REPO=~/src/taumar \
+BEISLID_REPO=~/src/beislid/main \
 ./install.sh
 ```
 
@@ -127,7 +129,7 @@ If the checkout exists, `./install.sh` runs:
 
 ```bash
 env MEMENTO_VAULT_PATH="$HOME/Personal/memento" ~/Projects/memento-vault/install.sh --experimental --mcp
-pi install ~/Projects/memento-vault
+# then normalizes ~/.pi/agent/settings.json to load only Memento's generic pi skills
 ```
 
 Manual status checks after install:
@@ -162,17 +164,23 @@ Expected pi tools after restart include usage reporting, safety gate, task state
 /subagents
 ```
 
-### Beislið/Taumar skills
+### Beislið skills
 
 If the checkout exists, `./install.sh` runs:
 
 ```bash
-~/Personal/taumar/install.sh --with-security-hooks --with-pi-show-me
+~/Personal/beislid/main/install.sh --with-security-hooks --with-pi-show-me
 ```
 
 That installs portable workflow skills into supported agent skill directories and optional pi show-me tools.
 
 ## Worktrunk setup
+
+If `cargo` exists, `./install.sh` installs the pinned Worktrunk CLI:
+
+```bash
+cargo install worktrunk --version 0.46.1
+```
 
 `config/.config/worktrunk/config.toml` is intentionally minimal and global-safe. It does not auto-symlink `.env*`, agent config, workflow state, local E2E folders, or `node_modules` into new worktrees.
 

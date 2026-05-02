@@ -11,18 +11,20 @@ DO_BEISLID=1
 DO_TONE_SKILLS=1
 DO_CLONE_OPEN_SOURCE=1
 DO_MCP_REMOTE=1
+DO_WORKTRUNK=1
 FORCE_LINKS_VALUE="${FORCE_LINKS:-0}"
 STATUS=0
 
 MEMENTO_REPO="${MEMENTO_REPO:-$HOME/Projects/memento-vault}"
 PI_EXTENSIONS_REPO="${PI_EXTENSIONS_REPO:-$HOME/Personal/pi-extensions}"
-BEISLID_REPO="${BEISLID_REPO:-$HOME/Personal/taumar}"
+BEISLID_REPO="${BEISLID_REPO:-$HOME/Personal/beislid/main}"
 MEMENTO_REPO_URL="${MEMENTO_REPO_URL:-https://github.com/sandsower/memento-vault.git}"
 PI_EXTENSIONS_REPO_URL="${PI_EXTENSIONS_REPO_URL:-https://github.com/sandsower/pi-extensions.git}"
 BEISLID_REPO_URL="${BEISLID_REPO_URL:-https://github.com/sandsower/beislid.git}"
 TONE_SKILLS_REPO="${TONE_SKILLS_REPO:-$HOME/Personal/tone-skills}"
 TONE_SKILLS_REPO_URL="${TONE_SKILLS_REPO_URL:-https://github.com/sandsower/tone-skills.git}"
 MCP_REMOTE_VERSION="${MCP_REMOTE_VERSION:-0.1.38}"
+WORKTRUNK_VERSION="${WORKTRUNK_VERSION:-0.46.1}"
 if [ -z "${MEMENTO_VAULT_PATH:-}" ] && [ -d "$HOME/Personal/memento" ]; then
   MEMENTO_VAULT_PATH="$HOME/Personal/memento"
 else
@@ -41,9 +43,10 @@ Default run:
   - clones public/open-source setup repos when missing
   - installs Memento Vault
   - installs personal pi extensions
-  - installs Beislið/Taumar skills
+  - installs Beislið skills
   - installs tone-skills (tone, tone-colleague, tone-pro, tone-practice + hook)
   - installs pinned mcp-remote when npm is available
+  - installs pinned Worktrunk CLI when cargo is available
 
 Flags:
   --status              Print detected install state and exit
@@ -52,10 +55,11 @@ Flags:
   --no-ai               Skip ai/link-agent-config.sh
   --no-memento          Skip Memento Vault install
   --no-pi-extensions    Skip pi install for personal pi extensions
-  --no-beislid          Skip Beislið/Taumar skill install
+  --no-beislid          Skip Beislið skill install
   --no-tone-skills      Skip tone-skills install
   --no-clone            Do not clone missing public setup repos
   --no-mcp-remote       Do not install mcp-remote with npm
+  --no-worktrunk        Do not install Worktrunk CLI with cargo
   --force-links         Repoint existing symlinks managed by ai/link-agent-config.sh
   -h, --help            Show this help
 
@@ -70,11 +74,12 @@ Environment overrides:
   MEMENTO_VAULT_PATH    Vault path passed to memento-vault installer (default: ~/Personal/memento when present, else ~/memento)
   PI_EXTENSIONS_REPO    Checkout path for personal pi extensions (default: ~/Personal/pi-extensions)
   PI_EXTENSIONS_REPO_URL Public clone URL for personal pi extensions
-  BEISLID_REPO          Checkout path for Beislið/Taumar skills (default: ~/Personal/taumar)
-  BEISLID_REPO_URL      Public clone URL for Beislið/Taumar skills
+  BEISLID_REPO          Checkout path for Beislið skills (default: ~/Personal/beislid/main)
+  BEISLID_REPO_URL      Public clone URL for Beislið skills
   TONE_SKILLS_REPO      Checkout path for tone-skills (default: ~/Personal/tone-skills)
   TONE_SKILLS_REPO_URL  Public clone URL for tone-skills
   MCP_REMOTE_VERSION    mcp-remote npm version (default: 0.1.38)
+  WORKTRUNK_VERSION     Worktrunk cargo version (default: 0.46.1)
   FORCE_LINKS           Set to 1 to repoint existing AI config symlinks
 
 Security boundary:
@@ -109,6 +114,7 @@ for arg in "$@"; do
     --no-tone-skills) DO_TONE_SKILLS=0 ;;
     --no-clone) DO_CLONE_OPEN_SOURCE=0 ;;
     --no-mcp-remote) DO_MCP_REMOTE=0 ;;
+    --no-worktrunk) DO_WORKTRUNK=0 ;;
     --force-links) FORCE_LINKS_VALUE=1 ;;
     -h|--help) usage; exit 0 ;;
     *) echo "unknown flag: $arg" >&2; usage >&2; exit 2 ;;
@@ -120,6 +126,7 @@ status() {
   command -v stow >/dev/null 2>&1 && echo "stow: $(command -v stow)" || echo "stow: missing"
   command -v pi >/dev/null 2>&1 && echo "pi: $(command -v pi)" || echo "pi: missing"
   command -v mcp-remote >/dev/null 2>&1 && echo "mcp-remote: $(command -v mcp-remote)" || echo "mcp-remote: missing"
+  command -v wt >/dev/null 2>&1 && echo "worktrunk: $(command -v wt)" || echo "worktrunk: missing"
   [ -d "$MEMENTO_REPO" ] && echo "memento repo: $MEMENTO_REPO" || echo "memento repo: missing ($MEMENTO_REPO)"
   [ -d "$PI_EXTENSIONS_REPO" ] && echo "pi extensions repo: $PI_EXTENSIONS_REPO" || echo "pi extensions repo: missing ($PI_EXTENSIONS_REPO)"
   [ -d "$BEISLID_REPO" ] && echo "beislid repo: $BEISLID_REPO" || echo "beislid repo: missing ($BEISLID_REPO)"
@@ -154,7 +161,7 @@ clone_repo_if_missing() {
   local name="$1"
   local path="$2"
   local url="$3"
-  if [ -d "$path/.git" ]; then
+  if git -C "$path" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     if repo_origin_matches "$path" "$url"; then
       log "$name repo already present"
       return 0
@@ -179,6 +186,71 @@ clone_repo_if_missing() {
   run git clone "$url" "$path"
 }
 
+ensure_memento_pi_package() {
+  local settings="$HOME/.pi/agent/settings.json"
+  if ! command -v pi >/dev/null 2>&1; then
+    return 0
+  fi
+  if ! command -v python3 >/dev/null 2>&1; then
+    warn "python3 missing; cannot safely register filtered Memento pi package"
+    warn "install python3, then rerun this installer"
+    return 0
+  fi
+  log "installing Memento pi package with generic-skill filter"
+  if [ "$DRY_RUN" -eq 1 ]; then
+    printf '+ normalize %q packages entry for %q with skills filter %q\n' "$settings" "$MEMENTO_REPO" "skills/generic"
+    return 0
+  fi
+  mkdir -p "$(dirname "$settings")"
+  python3 - "$settings" "$MEMENTO_REPO" <<'PY'
+import json
+import os
+import sys
+from pathlib import Path
+
+settings_path = Path(sys.argv[1]).expanduser()
+repo_path = Path(sys.argv[2]).expanduser().resolve()
+settings_dir = settings_path.parent
+source = os.path.relpath(repo_path, settings_dir)
+if not source.startswith("."):
+    source = f"./{source}"
+
+if settings_path.exists():
+    try:
+        data = json.loads(settings_path.read_text())
+    except json.JSONDecodeError as exc:
+        raise SystemExit(f"invalid pi settings JSON at {settings_path}: {exc}")
+else:
+    data = {}
+
+packages = data.get("packages", [])
+if not isinstance(packages, list):
+    raise SystemExit(f"invalid pi settings packages value at {settings_path}: expected list")
+
+
+def package_source(entry):
+    if isinstance(entry, str):
+        return entry
+    if isinstance(entry, dict) and isinstance(entry.get("source"), str):
+        return entry["source"]
+    return None
+
+
+def resolves_to_repo(src):
+    if src is None:
+        return False
+    if src.startswith(("npm:", "git:", "http://", "https://", "ssh://", "git://")):
+        return False
+    return (settings_dir / src).expanduser().resolve() == repo_path
+
+filtered = [entry for entry in packages if not resolves_to_repo(package_source(entry))]
+filtered.append({"source": source, "skills": ["skills/generic"]})
+data["packages"] = filtered
+settings_path.write_text(json.dumps(data, indent=2) + "\n")
+print(f"{settings_path}: Memento package filtered to skills/generic")
+PY
+}
+
 if [ "$DO_MCP_REMOTE" -eq 1 ]; then
   if command -v mcp-remote >/dev/null 2>&1; then
     log "mcp-remote already installed; leaving existing executable untouched"
@@ -187,6 +259,17 @@ if [ "$DO_MCP_REMOTE" -eq 1 ]; then
     run npm install -g "mcp-remote@$MCP_REMOTE_VERSION"
   else
     warn "npm missing; cannot install mcp-remote@$MCP_REMOTE_VERSION"
+  fi
+fi
+
+if [ "$DO_WORKTRUNK" -eq 1 ]; then
+  if command -v wt >/dev/null 2>&1; then
+    log "Worktrunk already installed; leaving existing executable untouched"
+  elif command -v cargo >/dev/null 2>&1; then
+    log "installing worktrunk@$WORKTRUNK_VERSION"
+    run cargo install worktrunk --version "$WORKTRUNK_VERSION"
+  else
+    warn "cargo missing; cannot install worktrunk@$WORKTRUNK_VERSION"
   fi
 fi
 
@@ -209,10 +292,7 @@ if [ "$DO_MEMENTO" -eq 1 ]; then
   if [ -x "$MEMENTO_REPO/install.sh" ]; then
     log "installing Memento Vault"
     run env MEMENTO_VAULT_PATH="$MEMENTO_VAULT_PATH" "$MEMENTO_REPO/install.sh" --experimental --mcp
-    if command -v pi >/dev/null 2>&1; then
-      log "installing Memento pi extension"
-      run pi install "$MEMENTO_REPO"
-    fi
+    ensure_memento_pi_package
   else
     warn "Memento repo not found at $MEMENTO_REPO; clone/install it separately or set MEMENTO_REPO"
   fi
@@ -233,12 +313,12 @@ if [ "$DO_PI_EXTENSIONS" -eq 1 ]; then
 fi
 
 if [ "$DO_BEISLID" -eq 1 ]; then
-  clone_repo_if_missing "Beislið/Taumar" "$BEISLID_REPO" "$BEISLID_REPO_URL" || true
+  clone_repo_if_missing "Beislið" "$BEISLID_REPO" "$BEISLID_REPO_URL" || true
   if [ -x "$BEISLID_REPO/install.sh" ]; then
-    log "installing Beislið/Taumar skills"
+    log "installing Beislið skills"
     run "$BEISLID_REPO/install.sh" --with-security-hooks --with-pi-show-me
   else
-    warn "Beislið/Taumar repo not found at $BEISLID_REPO; clone/install it separately or set BEISLID_REPO"
+    warn "Beislið repo not found at $BEISLID_REPO; clone/install it separately or set BEISLID_REPO"
   fi
 fi
 

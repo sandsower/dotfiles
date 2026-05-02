@@ -58,7 +58,7 @@ Add machine-specific and work-specific config outside this repo after bootstrap:
 
 - `dunstify` for desktop notifications
 - i3 via `i3-msg`
-- kitty as the terminal class
+- Ghostty as the primary terminal class, with Kitty retained as a legacy fallback
 - tmux sessions and panes
 
 The hook uses generic notification titles and bodies so it does not leak work context during screen sharing or notification sync.

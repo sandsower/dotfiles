@@ -1,3 +1,4 @@
 {
-  "tui.editor.deleteToLineStart": []
+  "tui.editor.deleteToLineStart": [],
+  "deleteToLineStart": []
 }

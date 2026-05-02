@@ -14,6 +14,10 @@ memories = true
 [mcp_servers.linear]
 url = "https://mcp.linear.app/mcp"
 
+[mcp_servers.memento-vault]
+url = "https://memento-vault-vic.fly.dev/mcp"
+bearer_token_env_var = "MEMENTO_API_KEY"
+
 # Add private MCP servers locally after bootstrap.
 
 [tui.model_availability_nux]

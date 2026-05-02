@@ -43,11 +43,12 @@ Agent flow:
 3. Install safe public prerequisites when normal package managers are available and Vic has approved mutation. Examples:
    - GNU Stow if missing.
    - `mcp-remote@0.1.38` if Linear MCP support is wanted.
+   - `worktrunk@0.46.1` if `cargo` is available.
 4. Treat `./install.sh` as the central new-machine setup entry point. It can clone and install the known public/open-source setup repos when they are missing.
 5. Check optional local checkouts:
    - `MEMENTO_REPO` or `~/Projects/memento-vault`
    - `PI_EXTENSIONS_REPO` or `~/Personal/pi-extensions`
-   - `BEISLID_REPO` or `~/Personal/taumar`
+   - `BEISLID_REPO` or `~/Personal/beislid/main`
 6. If a checkout is missing and `./install.sh` will clone it from the documented public URL, mention that before running the installer. For any private/personal repo not documented here, ask Vic for the source URL or restored path. Do not guess or search private context.
 7. Run `./install.sh --dry-run`.
 8. If the dry run is sane, run `./install.sh`. If it refuses to repoint an existing symlink, inspect the target; only rerun with `--force-links` when the existing symlink is known stale.
@@ -60,6 +61,7 @@ Verification commands after install:
 ./install.sh --status
 command -v pi || true
 command -v mcp-remote || true
+command -v wt || true
 ```
 
 Inside pi, check the installed surfaces:
@@ -122,7 +124,7 @@ Install command when present:
 
 ```bash
 env MEMENTO_VAULT_PATH="$HOME/Personal/memento" ~/Projects/memento-vault/install.sh --experimental --mcp
-pi install ~/Projects/memento-vault
+# then normalize ~/.pi/agent/settings.json so Memento loads only skills/generic
 ```
 
 Do not commit local vault contents, remote API keys, or private project rules to dotfiles. The repo-backed `ai/memento-vault/memento.yml` is only a generic template.
@@ -143,18 +145,20 @@ pi install ~/Personal/pi-extensions
 
 This should provide usage tracking, safety gate, task state, MCP bridge, and subagent tools. Keep extension source in its own repo. Do not vendor it here.
 
-### Beislið/Taumar workflow skills
+### Beislið workflow skills
 
 Default checkout:
 
 ```text
-~/Personal/taumar
+~/Personal/beislid/main
 ```
+
+The bare repo lives at `~/Personal/beislid.git`; additional worktrees can be created under `~/Personal/beislid/`.
 
 Install command when present:
 
 ```bash
-~/Personal/taumar/install.sh --with-security-hooks --with-pi-show-me
+~/Personal/beislid/main/install.sh --with-security-hooks --with-pi-show-me
 ```
 
 Keep project-specific workflow configuration outside dotfiles.

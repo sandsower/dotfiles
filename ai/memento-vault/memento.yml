@@ -1,7 +1,7 @@
 # Memento Vault configuration template
 # Copy or symlink to ~/.config/memento-vault/memento.yml, then add private/project-specific rules locally.
 
-vault_path: ~/memento
+vault_path: ~/Personal/memento
 
 exchange_threshold: 15
 file_count_threshold: 3

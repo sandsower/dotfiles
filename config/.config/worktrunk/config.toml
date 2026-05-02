@@ -1,6 +1,6 @@
 worktree-path = "{{ repo_path }}/{{ branch | sanitize }}"
 
-[post-create]
+[pre-start]
 update-main = """
 git fetch origin {{ default_branch }}
 git rebase origin/{{ default_branch }} 2>/dev/null || git rebase --abort 2>/dev/null || true
