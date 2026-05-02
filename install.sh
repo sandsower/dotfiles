@@ -8,6 +8,7 @@ DO_AI=1
 DO_MEMENTO=1
 DO_PI_EXTENSIONS=1
 DO_BEISLID=1
+DO_TONE_SKILLS=1
 DO_CLONE_OPEN_SOURCE=1
 DO_MCP_REMOTE=1
 FORCE_LINKS_VALUE="${FORCE_LINKS:-0}"
@@ -19,6 +20,8 @@ BEISLID_REPO="${BEISLID_REPO:-$HOME/Personal/taumar}"
 MEMENTO_REPO_URL="${MEMENTO_REPO_URL:-https://github.com/sandsower/memento-vault.git}"
 PI_EXTENSIONS_REPO_URL="${PI_EXTENSIONS_REPO_URL:-https://github.com/sandsower/pi-extensions.git}"
 BEISLID_REPO_URL="${BEISLID_REPO_URL:-https://github.com/sandsower/beislid.git}"
+TONE_SKILLS_REPO="${TONE_SKILLS_REPO:-$HOME/Personal/tone-skills}"
+TONE_SKILLS_REPO_URL="${TONE_SKILLS_REPO_URL:-https://github.com/sandsower/tone-skills.git}"
 MCP_REMOTE_VERSION="${MCP_REMOTE_VERSION:-0.1.38}"
 if [ -z "${MEMENTO_VAULT_PATH:-}" ] && [ -d "$HOME/Personal/memento" ]; then
   MEMENTO_VAULT_PATH="$HOME/Personal/memento"
@@ -39,6 +42,7 @@ Default run:
   - installs Memento Vault
   - installs personal pi extensions
   - installs Beislið/Taumar skills
+  - installs tone-skills (tone, tone-colleague, tone-pro, tone-practice + hook)
   - installs pinned mcp-remote when npm is available
 
 Flags:
@@ -49,6 +53,7 @@ Flags:
   --no-memento          Skip Memento Vault install
   --no-pi-extensions    Skip pi install for personal pi extensions
   --no-beislid          Skip Beislið/Taumar skill install
+  --no-tone-skills      Skip tone-skills install
   --no-clone            Do not clone missing public setup repos
   --no-mcp-remote       Do not install mcp-remote with npm
   --force-links         Repoint existing symlinks managed by ai/link-agent-config.sh
@@ -67,6 +72,8 @@ Environment overrides:
   PI_EXTENSIONS_REPO_URL Public clone URL for personal pi extensions
   BEISLID_REPO          Checkout path for Beislið/Taumar skills (default: ~/Personal/taumar)
   BEISLID_REPO_URL      Public clone URL for Beislið/Taumar skills
+  TONE_SKILLS_REPO      Checkout path for tone-skills (default: ~/Personal/tone-skills)
+  TONE_SKILLS_REPO_URL  Public clone URL for tone-skills
   MCP_REMOTE_VERSION    mcp-remote npm version (default: 0.1.38)
   FORCE_LINKS           Set to 1 to repoint existing AI config symlinks
 
@@ -99,6 +106,7 @@ for arg in "$@"; do
     --no-memento) DO_MEMENTO=0 ;;
     --no-pi-extensions) DO_PI_EXTENSIONS=0 ;;
     --no-beislid) DO_BEISLID=0 ;;
+    --no-tone-skills) DO_TONE_SKILLS=0 ;;
     --no-clone) DO_CLONE_OPEN_SOURCE=0 ;;
     --no-mcp-remote) DO_MCP_REMOTE=0 ;;
     --force-links) FORCE_LINKS_VALUE=1 ;;
@@ -115,6 +123,7 @@ status() {
   [ -d "$MEMENTO_REPO" ] && echo "memento repo: $MEMENTO_REPO" || echo "memento repo: missing ($MEMENTO_REPO)"
   [ -d "$PI_EXTENSIONS_REPO" ] && echo "pi extensions repo: $PI_EXTENSIONS_REPO" || echo "pi extensions repo: missing ($PI_EXTENSIONS_REPO)"
   [ -d "$BEISLID_REPO" ] && echo "beislid repo: $BEISLID_REPO" || echo "beislid repo: missing ($BEISLID_REPO)"
+  [ -d "$TONE_SKILLS_REPO" ] && echo "tone-skills repo: $TONE_SKILLS_REPO" || echo "tone-skills repo: missing ($TONE_SKILLS_REPO)"
   echo "clone public repos: $([ "$DO_CLONE_OPEN_SOURCE" -eq 1 ] && echo yes || echo no)"
   [ -d "$MEMENTO_VAULT_PATH" ] && echo "memento vault: $MEMENTO_VAULT_PATH" || echo "memento vault: missing ($MEMENTO_VAULT_PATH)"
 }
@@ -230,6 +239,16 @@ if [ "$DO_BEISLID" -eq 1 ]; then
     run "$BEISLID_REPO/install.sh" --with-security-hooks --with-pi-show-me
   else
     warn "Beislið/Taumar repo not found at $BEISLID_REPO; clone/install it separately or set BEISLID_REPO"
+  fi
+fi
+
+if [ "$DO_TONE_SKILLS" -eq 1 ]; then
+  clone_repo_if_missing "tone-skills" "$TONE_SKILLS_REPO" "$TONE_SKILLS_REPO_URL" || true
+  if [ -x "$TONE_SKILLS_REPO/install.sh" ]; then
+    log "installing tone-skills"
+    run "$TONE_SKILLS_REPO/install.sh" --patch-settings
+  else
+    warn "tone-skills repo not found at $TONE_SKILLS_REPO; clone/install it separately or set TONE_SKILLS_REPO"
   fi
 fi
 
