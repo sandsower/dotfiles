@@ -1,2 +1,6 @@
 zsh/.private_commands.sh
 docs/plans/
+.DS_Store
+.zcompdump*
+*.local
+*.local.*

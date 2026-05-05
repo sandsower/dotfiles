@@ -1,5 +1,5 @@
 {
-  "lastChangelogVersion": "0.71.0",
+  "lastChangelogVersion": "0.72.1",
   "defaultProvider": "openai-codex",
   "defaultModel": "gpt-5.5",
   "enabledModels": [
@@ -10,7 +10,7 @@
     "google/gemma-4-31b-it",
     "openai-codex/gpt-5.5"
   ],
-  "defaultThinkingLevel": "medium",
+  "defaultThinkingLevel": "high",
   "packages": [
     {
       "source": "../../Projects/memento-vault",
@@ -19,6 +19,7 @@
       ]
     },
     "../../Personal/beislid/main",
-    "git:git@github.com:sandsower/pi-extensions.git"
-  ]
+    "../../Personal/pi-extensions"
+  ],
+  "enableSkillCommands": true
 }

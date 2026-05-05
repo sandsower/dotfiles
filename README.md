@@ -12,6 +12,38 @@ From a checked-out repo:
 ./install.sh
 ```
 
+### macOS bootstrap
+
+On a fresh Apple Silicon Mac:
+
+```bash
+xcode-select --install
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+git clone <dotfiles-repo-url> ~/dotfiles
+cd ~/dotfiles
+brew bundle --file Brewfile
+./install.sh --status
+./install.sh --dry-run
+./install.sh
+```
+
+Then install the agent npm tools from a Node 24+ shell:
+
+```bash
+npm install -g \
+  @mariozechner/pi-coding-agent \
+  @mariozechner/pi-ai \
+  @openai/codex \
+  @google/gemini-cli \
+  @anthropic-ai/claude-code \
+  mcp-remote@0.1.38 \
+  @tobilu/qmd \
+  eas-cli \
+  @playwright/cli
+```
+
+Private auth/session state still needs to be restored manually from 1Password or provider login flows.
+
 If you are using Claude, Codex, or pi on a clean machine, tell the agent:
 
 ```text
@@ -196,7 +228,7 @@ If you recreate them, keep them opt-in and defensive:
 
 ## MCP setup
 
-`ai/pi/mcp.json` expects a local `mcp-remote` executable for Linear MCP. Install it outside this repo, pinned through your package manager or global npm tooling:
+`ai/pi/mcp.json` launches Linear MCP through `/usr/bin/env mcp-remote`, so `mcp-remote` must be on `PATH`. Install it outside this repo, pinned through your package manager or global npm tooling:
 
 ```bash
 npm install -g mcp-remote@0.1.38

@@ -1,221 +1,187 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
+# Powerlevel10k instant prompt. Keep near top.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# ~/.zshrc — disable Powerlevel10k when Cursor Agent runs
-if [[ -n "$CURSOR_AGENT" ]]; then
-  # Skip theme initialization for better compatibility
-else
-  [[ -r ~/.p10k.zsh ]] && source ~/.p10k.zsh
-fi
-
-# If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
-# Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
-
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="powerlevel10k/powerlevel10k"
-
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
-
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
-
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
-
-# Uncomment one of the following lines to change the auto-update behavior
-# zstyle ':omz:update' mode disabled  # disable automatic updates
-# zstyle ':omz:update' mode auto      # update automatically without asking
-# zstyle ':omz:update' mode reminder  # just remind me to update when it's time
-
-# Uncomment the following line to change how often to auto-update (in days).
-# zstyle ':omz:update' frequency 13
-
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
-
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
-
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
-
-# Uncomment the following line to display red dots whilst waiting for completion.
-# You can also set it to another string to have that shown instead of the default red dots.
-# e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
-# Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
-# COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
-
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
-
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
-plugins=(
-  git
-  fzf
-  zsh-vi-mode
-  zsh-autosuggestions
-  fzf-zsh-plugin)
-
-export GOPATH=$HOME/go
-export GOBIN=$GOPATH/bin
-export PYTHONBIN=$HOME/.local/bin
-export CARGOBIN=$HOME/.cargo/bin
-export LOCALBIN=$HOME/bin
-export FLYBIN=$HOME/.fly
-export ANDROID_HOME=$HOME/Android/Sdk
-export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
-export PATH="$LOCALBIN:/usr/local/opt/openjdk/bin:$PATH:$GOPATH:$GOBIN:$PYTHONBIN:$CARGOBIN:$FLYBIN:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/emulator"
-
-source $ZSH/oh-my-zsh.sh
-
-eval "$(zoxide init zsh --cmd cd)"
-eval "$(wt config shell init zsh)"
-
-# Wrap wt so that `wt switch` uses sesh inside tmux
-functions[_wt_original]="$functions[wt]"
-wt() {
-  if [[ -n "$TMUX" && "${1:-}" == "switch" ]]; then
-    local directive_file exit_code=0
-    directive_file="$(mktemp)"
-    WORKTRUNK_DIRECTIVE_FILE="$directive_file" command "${WORKTRUNK_BIN:-wt}" "$@" || exit_code=$?
-    if [[ $exit_code -eq 0 && -s "$directive_file" ]]; then
-      local target
-      target=$(sed "s/^cd '//;s/'$//" "$directive_file")
-      sesh connect "$target"
-    elif [[ -s "$directive_file" ]]; then
-      source "$directive_file"
-    fi
-    rm -f "$directive_file"
-    return "$exit_code"
-  fi
-  _wt_original "$@"
-}
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-# Replace vim with nvim
-alias vim="nvim"
-alias oldvim="\vim"
-
-# Lazygit
-alias lg="lazygit"
-
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/vic/Downloads/google-cloud-sdk/path.zsh.inc' ]; then . '/Users/vic/Downloads/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/vic/Downloads/google-cloud-sdk/completion.zsh.inc' ]; then . '/Users/vic/Downloads/google-cloud-sdk/completion.zsh.inc'; fi
-
-# Is docker misbehaving? try this
-
-removecontainers() {
-    docker stop $(docker ps -aq)
-    docker rm $(docker ps -aq)
-}
-
-armageddon() {
-    removecontainers
-    docker network prune -f
-    docker rmi -f $(docker images --filter dangling=true -qa)
-    docker volume rm $(docker volume ls --filter dangling=true -q)
-    docker rmi -f $(docker images -qa)
-}
-
 typeset -g POWERLEVEL9K_INSTANT_PROMPT=quiet
 
-source ~/.private_commands.sh
+# Platform / package-manager setup.
+case "$(uname -s)" in
+  Darwin)
+    export IS_MACOS=1
+    if [[ -x /opt/homebrew/bin/brew ]]; then
+      eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [[ -x /usr/local/bin/brew ]]; then
+      eval "$(/usr/local/bin/brew shellenv)"
+    fi
+    ;;
+  Linux)
+    export IS_LINUX=1
+    ;;
+esac
 
-alias cat="bat"
-alias ls="eza"
+# oh-my-zsh location varies by installer/package manager.
+if [[ -z "${ZSH:-}" ]]; then
+  for candidate in \
+    "$HOME/.oh-my-zsh" \
+    "${HOMEBREW_PREFIX:-}/share/oh-my-zsh" \
+    "/usr/share/oh-my-zsh"; do
+    if [[ -s "$candidate/oh-my-zsh.sh" ]]; then
+      export ZSH="$candidate"
+      break
+    fi
+  done
+fi
+
+ZSH_THEME="powerlevel10k/powerlevel10k"
+ZSH_CUSTOM="${ZSH_CUSTOM:-${ZSH:-$HOME/.oh-my-zsh}/custom}"
+
+plugins=(git)
+if [[ -n "${ZSH:-}" ]]; then
+  [[ -d "$ZSH/plugins/fzf" ]] && plugins+=(fzf)
+  for plugin in zsh-vi-mode zsh-autosuggestions; do
+    if [[ -d "$ZSH_CUSTOM/plugins/$plugin" || -d "$ZSH/plugins/$plugin" ]]; then
+      plugins+=("$plugin")
+    fi
+  done
+fi
+
+if [[ -s "${ZSH:-}/oh-my-zsh.sh" ]]; then
+  source "$ZSH/oh-my-zsh.sh"
+fi
+
+# Prompt config. Cursor Agent gets a simpler shell.
+if [[ -z "$CURSOR_AGENT" && -r "$HOME/.p10k.zsh" ]]; then
+  source "$HOME/.p10k.zsh"
+fi
+
+# Tool homes.
+export GOPATH="${GOPATH:-$HOME/go}"
+export GOBIN="${GOBIN:-$GOPATH/bin}"
+export PYTHONBIN="${PYTHONBIN:-$HOME/.local/bin}"
+export CARGOBIN="${CARGOBIN:-$HOME/.cargo/bin}"
+export LOCALBIN="${LOCALBIN:-$HOME/bin}"
+export FLYBIN="${FLYBIN:-$HOME/.fly}"
+
+if [[ -n "${IS_MACOS:-}" ]]; then
+  export ANDROID_HOME="${ANDROID_HOME:-$HOME/Library/Android/sdk}"
+  if [[ -z "${JAVA_HOME:-}" && -x /usr/libexec/java_home ]]; then
+    JAVA_HOME="$(/usr/libexec/java_home -v 17 2>/dev/null || /usr/libexec/java_home 2>/dev/null || true)"
+    [[ -n "$JAVA_HOME" ]] && export JAVA_HOME
+  fi
+  export PNPM_HOME="${PNPM_HOME:-$HOME/Library/pnpm}"
+elif [[ -n "${IS_LINUX:-}" ]]; then
+  export ANDROID_HOME="${ANDROID_HOME:-$HOME/Android/Sdk}"
+  [[ -z "${JAVA_HOME:-}" && -d /usr/lib/jvm/java-17-openjdk ]] && export JAVA_HOME=/usr/lib/jvm/java-17-openjdk
+  export PNPM_HOME="${PNPM_HOME:-$HOME/.local/share/pnpm}"
+fi
+
+# Deduplicated PATH. zsh's path array keeps this readable and portable.
+typeset -U path
+path=(
+  "$LOCALBIN"
+  "$PYTHONBIN"
+  "$CARGOBIN"
+  "$GOBIN"
+  "$FLYBIN"
+  "$PNPM_HOME"
+  "${HOMEBREW_PREFIX:-}/opt/openjdk/bin"
+  "$ANDROID_HOME/platform-tools"
+  "$ANDROID_HOME/cmdline-tools/latest/bin"
+  "$ANDROID_HOME/emulator"
+  $path
+)
+export PATH
+
+# Runtime initializers.
+if command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init zsh --cmd cd)"
+fi
+
+if command -v wt >/dev/null 2>&1; then
+  eval "$(wt config shell init zsh)"
+
+  # Wrap wt so `wt switch` uses sesh inside tmux when available.
+  if (( $+functions[wt] )); then
+    functions[_wt_original]="$functions[wt]"
+    wt() {
+      if [[ -n "$TMUX" && "${1:-}" == "switch" && -n "${commands[sesh]:-}" ]]; then
+        local directive_file exit_code=0
+        directive_file="$(mktemp)"
+        WORKTRUNK_DIRECTIVE_FILE="$directive_file" command "${WORKTRUNK_BIN:-wt}" "$@" || exit_code=$?
+        if [[ $exit_code -eq 0 && -s "$directive_file" ]]; then
+          local target
+          target=$(sed "s/^cd '//;s/'$//" "$directive_file")
+          sesh connect "$target"
+        elif [[ -s "$directive_file" ]]; then
+          source "$directive_file"
+        fi
+        rm -f "$directive_file"
+        return "$exit_code"
+      fi
+      _wt_original "$@"
+    }
+  fi
+fi
+
+# Node / nvm. Prefer a user install, then Homebrew, then Arch package init.
+export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
+if [[ -s "$NVM_DIR/nvm.sh" ]]; then
+  source "$NVM_DIR/nvm.sh"
+  [[ -s "$NVM_DIR/bash_completion" ]] && source "$NVM_DIR/bash_completion"
+elif [[ -n "${HOMEBREW_PREFIX:-}" && -s "$HOMEBREW_PREFIX/opt/nvm/nvm.sh" ]]; then
+  source "$HOMEBREW_PREFIX/opt/nvm/nvm.sh"
+  [[ -s "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm" ]] && source "$HOMEBREW_PREFIX/opt/nvm/etc/bash_completion.d/nvm"
+elif [[ -s /usr/share/nvm/init-nvm.sh ]]; then
+  source /usr/share/nvm/init-nvm.sh
+fi
+
+# Google Cloud SDK, if manually unpacked.
+if [[ -f "$HOME/Downloads/google-cloud-sdk/path.zsh.inc" ]]; then
+  source "$HOME/Downloads/google-cloud-sdk/path.zsh.inc"
+fi
+if [[ -f "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc" ]]; then
+  source "$HOME/Downloads/google-cloud-sdk/completion.zsh.inc"
+fi
+
+# Private aliases/secrets live outside dotfiles.
+[[ -r "$HOME/.private_commands.sh" ]] && source "$HOME/.private_commands.sh"
+
+# Aliases.
+command -v bat >/dev/null 2>&1 && alias cat="bat"
+command -v eza >/dev/null 2>&1 && alias ls="eza"
+alias vim="nvim"
+alias oldvim="\vim"
+alias lg="lazygit"
 alias nx="npx --no-install nx"
 alias k="kubectl"
 alias kns="kubens"
 alias kx="kubectx"
-source /usr/share/nvm/init-nvm.sh
-
-# pnpm
-export PNPM_HOME="/home/vic/.local/share/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end
-
-
-
 alias gcrb='git for-each-ref --sort=-committerdate --count=30 --format='\''%(refname:short)'\'' refs/heads/ | fzf --height=20% --reverse --info=inline | xargs git checkout'
 
-# Clean stale Firefox lock before launching (prevents "already running" error)
-firefox() {
-  rm -f ~/.mozilla/firefox/*.default-release/.parentlock 2>/dev/null
-  command firefox "$@"
+# Docker cleanup helpers.
+removecontainers() {
+  docker stop $(docker ps -aq)
+  docker rm $(docker ps -aq)
 }
 
-# Warm QMD embedding model on shell startup (detached, silent)
-[ -x "$HOME/Projects/memento-vault/bin/memento-vault" ] && "$HOME/Projects/memento-vault/bin/memento-vault" warmup >/dev/null 2>&1
+armageddon() {
+  removecontainers
+  docker network prune -f
+  docker rmi -f $(docker images --filter dangling=true -qa)
+  docker volume rm $(docker volume ls --filter dangling=true -q)
+  docker rmi -f $(docker images -qa)
+}
+
+# Clean stale Firefox lock before launching on Linux.
+if [[ -n "${IS_LINUX:-}" ]]; then
+  firefox() {
+    rm -f ~/.mozilla/firefox/*.default-release/.parentlock 2>/dev/null
+    command firefox "$@"
+  }
+fi
+
+# Warm QMD embedding model on shell startup (detached, silent).
+if [[ -x "$HOME/Projects/memento-vault/bin/memento-vault" ]]; then
+  "$HOME/Projects/memento-vault/bin/memento-vault" warmup >/dev/null 2>&1 &!
+fi

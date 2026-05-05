@@ -1,8 +1,9 @@
 {
   "mcpServers": {
     "linear": {
-      "command": "mcp-remote",
+      "command": "/usr/bin/env",
       "args": [
+        "mcp-remote",
         "https://mcp.linear.app/mcp"
       ]
     }
