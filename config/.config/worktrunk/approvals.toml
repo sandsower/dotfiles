@@ -1,0 +1,24 @@
+[projects."github.com/sandsower/memento-vault"]
+approved-commands = [
+    """
+if [ -d {{ primary_worktree_path }}/.venv ] && [ ! -e .venv ]; then
+  ln -s {{ primary_worktree_path }}/.venv .venv
+fi
+""",
+]
+
+[projects."github.com/sandsower/rondo"]
+approved-commands = [
+    """
+set -eu
+src="{{ repo_path }}/elixir/deps"
+dst="elixir/deps"
+if [ -L "$dst" ] && [ ! -e "$dst" ]; then
+  rm "$dst"
+fi
+if [ -d "$src" ] && [ ! -e "$dst" ]; then
+  ln -s "$src" "$dst"
+  echo "linked $dst -> $src"
+fi
+""",
+]

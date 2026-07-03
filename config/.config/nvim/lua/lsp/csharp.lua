@@ -1,8 +1,7 @@
-local lspconfig = require('lspconfig')
-
 local M = {}
+
 M.setup = function(on_attach, capabilities)
-  lspconfig.csharp_ls.setup({
+  vim.lsp.config('csharp_ls', {
     on_attach = on_attach,
     capabilities = capabilities,
     settings = {
@@ -13,6 +12,7 @@ M.setup = function(on_attach, capabilities)
       },
     }
   })
+  vim.lsp.enable('csharp_ls')
 end
 
 return M

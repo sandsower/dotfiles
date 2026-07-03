@@ -2,15 +2,18 @@
 [user]
 # Please adapt and uncomment the following lines:
 	name = Vic Valenzuela 
+	email = vic@valenzuela.is
 [init]
 	templatedir = ~/.git-templates
 [pull]
 	rebase = false
 [credential "https://github.com"]
 	helper = 
-	helper = !/usr/bin/gh auth git-credential
+	helper = !/usr/bin/env gh auth git-credential
 [credential "https://gist.github.com"]
 	helper = 
-	helper = !/usr/bin/gh auth git-credential
+	helper = !/usr/bin/env gh auth git-credential
 [include]
 	path = ~/.gitconfig.local
+[core]
+	pager = cat

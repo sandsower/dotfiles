@@ -19,7 +19,7 @@ require("lazy").setup({
   "drewtempelmeyer/palenight.vim",
 
   --Colorizer
-  "norcalli/nvim-colorizer.lua",
+  "NvChad/nvim-colorizer.lua",
 
   --WhichKey for help
   "folke/which-key.nvim",
@@ -140,7 +140,7 @@ require("lazy").setup({
   --Fuzzy finder/movement
   { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
   "nvim-telescope/telescope.nvim",
-  "phaazon/hop.nvim",
+  "smoka7/hop.nvim",
 
   --File Tree
   "kyazdani42/nvim-web-devicons", --for file icons,
@@ -199,7 +199,7 @@ require("lazy").setup({
   "ThePrimeagen/harpoon",
 
   -- Rust
-  "simrat39/rust-tools.nvim",
+  -- rust-tools.nvim uses the deprecated nvim-lspconfig setup API on Nvim 0.12+.
 
   -- CSharp
   -- https://github.com/Decodetalkers/csharpls-extended-lsp.nvim

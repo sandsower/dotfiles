@@ -7,12 +7,13 @@ local buf_map = function(bufnr, mode, lhs, rhs, opts)
 end
 
 
-vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
-  vim.lsp.handlers.signature_help, {
+vim.lsp.handlers['textDocument/signatureHelp'] = function(err, result, ctx, config)
+  config = vim.tbl_deep_extend('force', config or {}, {
     border = 'rounded',
     close_events = { "CursorMoved", "BufHidden", "InsertCharPre" },
-  }
-)
+  })
+  return vim.lsp.handlers.signature_help(err, result, ctx, config)
+end
 
 -- local capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
 
@@ -109,8 +110,6 @@ local servers = {
   "tailwindcss",
 }
 
-local lspconfig = require('lspconfig')
-
 -- Setup mason-lspconfig for automatic server installation
 local mason_lspconfig_ok, mason_lspconfig = pcall(require, 'mason-lspconfig')
 if mason_lspconfig_ok then
@@ -130,24 +129,27 @@ for _, server in ipairs(servers) do
     require("lsp.gopls").setup(on_attach, capabilities)
   else
     -- Default setup for other servers
-    lspconfig[server].setup({
+    vim.lsp.config(server, {
       on_attach = on_attach,
       capabilities = capabilities,
     })
+    vim.lsp.enable(server)
   end
 end
 
 -- Setup additional servers not in the list
-lspconfig.gleam.setup({
+vim.lsp.config('gleam', {
   on_attach = on_attach,
   capabilities = capabilities,
 })
+vim.lsp.enable('gleam')
 
-lspconfig.htmx.setup({
+vim.lsp.config('htmx', {
   capabilities = capabilities,
   on_attach = on_attach,
   filetypes = { "html", "gleam" },
 })
+vim.lsp.enable('htmx')
 
 -- Turn on lsp status information
 require('fidget').setup()

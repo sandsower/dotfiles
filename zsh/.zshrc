@@ -1,3 +1,6 @@
+# Kiro CLI pre block. Keep at the top of this file.
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh"
+
 # Powerlevel10k instant prompt. Keep near top.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
@@ -98,30 +101,116 @@ if command -v zoxide >/dev/null 2>&1; then
   eval "$(zoxide init zsh --cmd cd)"
 fi
 
-if command -v wt >/dev/null 2>&1; then
-  eval "$(wt config shell init zsh)"
+if command -v wt >/dev/null 2>&1; then eval "$(command wt config shell init zsh)"; fi
 
-  # Wrap wt so `wt switch` uses sesh inside tmux when available.
+if command -v wt >/dev/null 2>&1; then
+  # Wrap `wt switch` inside tmux so worktrees become windows in the current repo session.
   if (( $+functions[wt] )); then
     functions[_wt_original]="$functions[wt]"
+
+    _tg_worktree_window_name() {
+      emulate -L zsh
+      local target="$1"
+      local base="${target:t}"
+      local slug name rest
+
+      slug="$(printf '%s' "$base" | tr '[:upper:]' '[:lower:]' | sed -E 's/[^a-z0-9]+/-/g; s/^-+//; s/-+$//; s/-+/-/g')"
+      [[ -z "$slug" ]] && slug="worktree"
+
+      if [[ "$slug" =~ '([a-z]+-[0-9]+)-?(.*)' ]]; then
+        name="$match[1]"
+        rest="$match[2]"
+        [[ -n "$rest" ]] && name="$name-$rest"
+      else
+        name="$slug"
+      fi
+
+      if (( ${#name} > 42 )); then
+        name="${name[1,42]}"
+        name="${name%-}"
+      fi
+
+      printf '%s' "$name"
+    }
+
+    _tg_select_or_create_worktree_window() {
+      emulate -L zsh
+      local target="$1"
+      shift
+
+      local found window_name new_id shell_cmd
+
+      if [[ "$PWD" == "$target" ]]; then
+        tmux set-window-option @worktree_path "$target" >/dev/null 2>&1 || true
+        return
+      fi
+
+      found="$(tmux list-windows -F '#{window_id}\t#{@worktree_path}' 2>/dev/null | awk -F '\t' -v target="$target" '$2 == target { print $1; exit }')"
+
+      if [[ -z "$found" ]]; then
+        found="$(tmux list-windows -F '#{window_id}\t#{pane_current_path}' 2>/dev/null | awk -F '\t' -v target="$target" '$2 == target { print $1; exit }')"
+      fi
+
+      if [[ -n "$found" ]]; then
+        tmux set-window-option -t "$found" @worktree_path "$target" >/dev/null 2>&1 || true
+        tmux select-window -t "$found"
+        return
+      fi
+
+      window_name="$(_tg_worktree_window_name "$target")"
+      if (( $# > 0 )); then
+        local -a quoted
+        quoted=("${(@q)@}")
+        shell_cmd="${(j: :)quoted}"
+        new_id="$(tmux new-window -P -F '#{window_id}' -c "$target" -n "$window_name" "$shell_cmd")"
+      else
+        new_id="$(tmux new-window -P -F '#{window_id}' -c "$target" -n "$window_name")"
+      fi
+      tmux set-window-option -t "$new_id" @worktree_path "$target" >/dev/null 2>&1 || true
+    }
+
     wt() {
-      if [[ -n "$TMUX" && "${1:-}" == "switch" && -n "${commands[sesh]:-}" ]]; then
-        local directive_file exit_code=0
-        directive_file="$(mktemp)"
-        WORKTRUNK_DIRECTIVE_FILE="$directive_file" command "${WORKTRUNK_BIN:-wt}" "$@" || exit_code=$?
-        if [[ $exit_code -eq 0 && -s "$directive_file" ]]; then
-          local target
-          target=$(sed "s/^cd '//;s/'$//" "$directive_file")
-          sesh connect "$target"
-        elif [[ -s "$directive_file" ]]; then
-          source "$directive_file"
+      if [[ -n "$TMUX" && "${1:-}" == "switch" && -n "${commands[tmux]:-}" ]]; then
+        local cd_file exec_file exit_code=0 target arg passthrough_mode=0
+        local -a wt_args passthrough
+        wt_args=()
+        passthrough=()
+
+        for arg in "$@"; do
+          if (( passthrough_mode )); then
+            passthrough+=("$arg")
+          elif [[ "$arg" == "--" ]]; then
+            passthrough_mode=1
+          else
+            wt_args+=("$arg")
+          fi
+        done
+
+        cd_file="$(mktemp)"
+        exec_file="$(mktemp)"
+        WORKTRUNK_DIRECTIVE_CD_FILE="$cd_file" WORKTRUNK_DIRECTIVE_EXEC_FILE="$exec_file" command "${WORKTRUNK_BIN:-wt}" "${wt_args[@]}" || exit_code=$?
+        if [[ $exit_code -eq 0 && -s "$cd_file" ]]; then
+          target="$(<"$cd_file")"
+          if [[ -n "$target" && -d "$target" ]]; then
+            _tg_select_or_create_worktree_window "$target" "${passthrough[@]}"
+          fi
         fi
-        rm -f "$directive_file"
+        if [[ -s "$exec_file" ]]; then
+          source "$exec_file"
+        fi
+        rm -f "$cd_file" "$exec_file"
         return "$exit_code"
       fi
       _wt_original "$@"
     }
   fi
+
+  alias ws='wt switch'
+  alias wsc='wt switch --create'
+fi
+
+if command -v tmux-glance >/dev/null 2>&1; then
+  alias tg='tmux-glance'
 fi
 
 # Node / nvm. Prefer a user install, then Homebrew, then Arch package init.
@@ -182,6 +271,37 @@ if [[ -n "${IS_LINUX:-}" ]]; then
 fi
 
 # Warm QMD embedding model on shell startup (detached, silent).
-if [[ -x "$HOME/Projects/memento-vault/bin/memento-vault" ]]; then
-  "$HOME/Projects/memento-vault/bin/memento-vault" warmup >/dev/null 2>&1 &!
+for memento_bin in \
+  "$HOME/Projects/memento-vault/bin/memento-vault" \
+  "$HOME/Personal/memento-vault/bin/memento-vault"; do
+  if [[ -x "$memento_bin" ]]; then
+    "$memento_bin" warmup >/dev/null 2>&1 &!
+    break
+  fi
+done
+
+# --- Claude Code account split (work = default ~/.claude, personal = ~/Personal/.claude-config)
+# An `alias claude='claude <flags>'` may exist from earlier config; absorb its flags
+# into the routing function (aliases and functions can't share the name in zsh).
+if [[ -n ${aliases[claude]:-} ]]; then
+  _claude_default_flags=(${(z)${aliases[claude]#claude}})
+  unalias claude
+else
+  _claude_default_flags=()
+fi
+# auto-switch: any repo under ~/Personal uses the personal subscription
+'claude'() {
+  case "$PWD/" in
+    "$HOME/Personal/"*) CLAUDE_CONFIG_DIR="$HOME/Personal/.claude-config" command claude "${_claude_default_flags[@]}" "$@" ;;
+    *) command claude "${_claude_default_flags[@]}" "$@" ;;
+  esac
+}
+alias claude-personal='CLAUDE_CONFIG_DIR="$HOME/Personal/.claude-config" command claude'
+
+
+# Kiro CLI post block. Keep at the bottom of this file.
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"
+
+if [[ "$TERM_PROGRAM" == "kiro" ]] && command -v kiro >/dev/null 2>&1; then
+  source "$(kiro --locate-shell-integration-path zsh)"
 fi
