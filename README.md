@@ -214,17 +214,21 @@ If `cargo` exists, `./install.sh` installs the pinned Worktrunk CLI:
 cargo install worktrunk --version 0.46.1
 ```
 
-`config/.config/worktrunk/config.toml` is intentionally minimal and global-safe. It does not auto-symlink `.env*`, agent config, workflow state, local E2E folders, or `node_modules` into new worktrees.
+`config/.config/worktrunk/config.toml` keeps the worktree path global and includes one local-convenience `pre-start` hook. The hook is intentionally repo-name agnostic: for any project, it copies `.env` / `.env.*` files from the primary worktree and symlinks existing package-level `node_modules` directories into the new worktree.
 
-Those conveniences should be recreated only as trusted per-repo setup or a private local overlay. They are useful for local dev, but not safe as global defaults because they can spread credentials, local agent permissions, or mutable package state into unrelated worktrees.
+This is useful for local solo development, but it can spread credentials or shared mutable dependency state. Disable it for a command with:
 
-If you recreate them, keep them opt-in and defensive:
+```bash
+WORKTRUNK_LOCAL_FILES=0 wt switch --create <branch>
+```
 
-- never commit secret values
-- refuse to overwrite regular files
-- only replace an existing path when it is already the expected symlink
-- avoid sharing `node_modules` unless you explicitly accept cross-worktree dependency state
-- document which repo/worktree layout the hook assumes
+The hook stays defensive:
+
+- never commits or prints secret values
+- copies `.env*` files instead of symlinking them
+- skips dependency/build/coverage/worktrunk-managed directories while discovering env files
+- refuses to overwrite regular files or existing symlinks
+- only replaces an existing path when it is already the expected broken symlink
 
 ## MCP setup
 

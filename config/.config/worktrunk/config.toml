@@ -1,14 +1,70 @@
 worktree-path = "{{ repo_path }}/{{ branch | sanitize }}"
 
-[pre-start]
+[[pre-start]]
 update-main = """
 git fetch origin {{ default_branch }}
 git rebase origin/{{ default_branch }} 2>/dev/null || git rebase --abort 2>/dev/null || true
 """
 
-# Keep secret/config propagation opt-in and repo-local.
-# Do not symlink .env*, agent config, workflow state, local E2E folders,
-# node_modules, or other runtime state from the primary worktree by default.
-# Those conveniences should be recreated only as trusted per-repo setup or a
-# private local overlay because they can carry credentials, local permissions,
-# or shared mutable package state into branches that should stay isolated.
+[[pre-start]]
+local-files = '''
+set -eu
+
+# Copies local env files and symlinks dependency installs from the primary
+# worktree into new worktrees. Disable for one command with:
+#   WORKTRUNK_LOCAL_FILES=0 wt switch --create <branch>
+[ "${WORKTRUNK_LOCAL_FILES:-1}" = "0" ] && exit 0
+
+primary="{{ primary_worktree_path }}"
+[ -d "$primary" ] || exit 0
+
+# Copy any .env / .env.* files from the primary worktree, without descending
+# into dependency, build, coverage, or Worktrunk-managed directories.
+find "$primary" \
+  \( -type d \( \
+    -name .git -o \
+    -name .worktrees -o \
+    -name node_modules -o \
+    -name .next -o \
+    -name .turbo -o \
+    -name dist -o \
+    -name build -o \
+    -name coverage \
+  \) -prune \) \
+  -o -type f \( -name ".env" -o -name ".env.*" \) -print |
+while IFS= read -r src; do
+  rel="${src#"$primary"/}"
+  if [ ! -e "$rel" ]; then
+    mkdir -p "$(dirname "$rel")"
+    cp -p "$src" "$rel"
+  fi
+done
+
+# Symlink package-level node_modules directories from the primary worktree.
+# Existing files/directories/symlinks are left untouched.
+find "$primary" \
+  \( -type d \( \
+    -name .git -o \
+    -name .worktrees -o \
+    -name .next -o \
+    -name .turbo -o \
+    -name dist -o \
+    -name build -o \
+    -name coverage \
+  \) -prune \) \
+  -o -type d -name node_modules -prune -print |
+while IFS= read -r src; do
+  rel="${src#"$primary"/}"
+  if [ -L "$rel" ] && [ "$(readlink "$rel")" = "$src" ] && [ ! -e "$rel" ]; then
+    rm "$rel"
+  fi
+  if [ ! -e "$rel" ] && [ ! -L "$rel" ]; then
+    mkdir -p "$(dirname "$rel")"
+    ln -s "$src" "$rel"
+  fi
+done
+'''
+
+# This deliberately avoids hard-coded customer/repo names. It copies .env files
+# rather than symlinking them, and only symlinks dependency directories that
+# already exist in the primary worktree. It never overwrites existing paths.
