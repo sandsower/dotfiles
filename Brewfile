@@ -1,8 +1,8 @@
 # macOS bootstrap for Vic's portable development/agent stack.
 # Run with: brew bundle --file ~/dotfiles/Brewfile
 
-tap "homebrew/bundle"
-tap "homebrew/services"
+# homebrew/bundle and homebrew/services were deprecated and emptied upstream;
+# `brew bundle` and `brew services` are built into Homebrew now. Tapping them fails.
 tap "hashicorp/tap"
 tap "jesseduffield/lazygit"
 tap "joshmedeski/sesh"
@@ -13,6 +13,7 @@ brew "git"
 brew "git-lfs"
 brew "gh"
 brew "stow"
+brew "neovim" # config/.config/nvim is stowed by install.sh; .zshrc aliases vim=nvim
 brew "zsh"
 brew "tmux"
 brew "sesh"
@@ -70,7 +71,7 @@ brew "tailscale"
 
 # Editors / terminals / local apps
 cask "1password"
-brew "1password-cli"
+cask "1password-cli" # ships as a cask, not a formula
 cask "amethyst"
 cask "basictex"
 cask "ghostty"

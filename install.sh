@@ -276,7 +276,12 @@ fi
 if [ "$DO_STOW" -eq 1 ]; then
   if command -v stow >/dev/null 2>&1; then
     log "stowing base dotfiles"
-    run stow -d "$ROOT" -t "$HOME" config git zsh
+    # --no-folding is required: without it, stow replaces a missing ~/.config
+    # with a single symlink into this repo, so anything later written to
+    # ~/.config (memento manifests, qmd index, agent runtime state) lands in
+    # the working tree. Keep per-file links instead.
+    run mkdir -p "$HOME/.config" "$HOME/.scripts" "$HOME/.wallpapers"
+    run stow --no-folding -d "$ROOT" -t "$HOME" config git zsh
   else
     warn "stow missing; install it or rerun with --no-stow"
   fi
@@ -316,7 +321,9 @@ if [ "$DO_BEISLID" -eq 1 ]; then
   clone_repo_if_missing "Beislið" "$BEISLID_REPO" "$BEISLID_REPO_URL" || true
   if [ -x "$BEISLID_REPO/install.sh" ]; then
     log "installing Beislið skills"
-    run "$BEISLID_REPO/install.sh" --with-security-hooks --with-pi-show-me
+    # --with-pi-show-me was removed upstream; current opt-ins are
+    # --with-security-hooks and --with-signal-hooks.
+    run "$BEISLID_REPO/install.sh" --with-security-hooks
   else
     warn "Beislið repo not found at $BEISLID_REPO; clone/install it separately or set BEISLID_REPO"
   fi

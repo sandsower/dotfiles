@@ -89,6 +89,7 @@ path=(
   "$FLYBIN"
   "$PNPM_HOME"
   "${HOMEBREW_PREFIX:-}/opt/openjdk/bin"
+  "${HOMEBREW_PREFIX:-}/opt/avr-gcc@8/bin" # keg-only; QMK pins avr-gcc 8
   "$ANDROID_HOME/platform-tools"
   "$ANDROID_HOME/cmdline-tools/latest/bin"
   "$ANDROID_HOME/emulator"
