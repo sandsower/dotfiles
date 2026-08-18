@@ -12,8 +12,18 @@ end
 
 ---@diagnostic disable-next-line: missing-fields
 require('nvim-treesitter.configs').setup({
-  -- One of "all", "maintained" (parsers with maintainers), or a list of languages
-  ensure_installed = "all",
+  -- Scoped to languages this config actually has LSP/formatting/plugin support for
+  -- (was "all", which pulls ~950 parsers including things like bpftrace, uxntal, ziggy_schema)
+  ensure_installed = {
+    "javascript", "typescript", "tsx", "json", "jsonc", "jsonnet",
+    "html", "css", "scss", "graphql",
+    "go", "gomod", "gowork", "gosum",
+    "rust", "gleam", "python", "hcl", "terraform",
+    "yaml", "toml", "sql", "dockerfile",
+    "lua", "vim", "vimdoc", "query", "regex", "comment",
+    "markdown", "markdown_inline",
+    "bash", "diff", "git_config", "gitcommit", "gitignore",
+  },
 
   -- Install languages synchronously (only applied to `ensure_installed`)
   sync_install = false,

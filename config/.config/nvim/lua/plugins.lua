@@ -85,7 +85,6 @@ require("lazy").setup({
           })
         end,
       },
-      'jose-elias-alvarez/typescript.nvim',
       'simrat39/inlay-hints.nvim'
     },
     -- opts = {
@@ -110,6 +109,7 @@ require("lazy").setup({
 
   {
     "nvim-treesitter/nvim-treesitter",
+    branch = "master", -- "main" dropped the nvim-treesitter.configs API our settings/nvim-treesitter.lua depends on
     build = ":TSUpdate", --We recommend updating the parsers on update
     config = false, -- We configure it manually in settings/nvim-treesitter.lua
   },
@@ -135,7 +135,10 @@ require("lazy").setup({
   "hrsh7th/vim-vsnip",
 
   --Debugging utils
-  "ThePrimeagen/refactoring.nvim",
+  {
+    "ThePrimeagen/refactoring.nvim",
+    dependencies = { "lewis6991/async.nvim" },
+  },
 
   --Fuzzy finder/movement
   { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
@@ -200,13 +203,6 @@ require("lazy").setup({
 
   -- Rust
   -- rust-tools.nvim uses the deprecated nvim-lspconfig setup API on Nvim 0.12+.
-
-  -- CSharp
-  -- https://github.com/Decodetalkers/csharpls-extended-lsp.nvim
-  "Decodetalkers/csharpls-extended-lsp.nvim",
-
-  -- Scala
-  { 'scalameta/nvim-metals',    dependencies = { "nvim-lua/plenary.nvim" } },
 
   -- Golang
   'mfussenegger/nvim-dap',
